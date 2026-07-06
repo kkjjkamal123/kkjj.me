@@ -1,20 +1,18 @@
-HOW TO PUSH THIS PORTFOLIO TO  github.com/kkjjkamal123
-======================================================
+HOW TO PUSH THIS PORTFOLIO TO GITHUB
+====================================
 
-This repo already has one clean commit (author: Kamalesh VS). You only need to
-run it from a machine/account that can authenticate as kkjjkamal123.
+This repo already has one clean commit. You only need to run it from a machine/account
+that can authenticate as your GitHub user.
 
 WHY IT WASN'T PUSHED AUTOMATICALLY:
-The machine it was built on has an SSH key that authenticates as "shakthisharavan".
-A GitHub SSH key can belong to only one account, so it cannot push as kkjjkamal123.
-Run the steps below where the kkjjkamal123 key lives
-(SHA256:scF1cidpof0oWhZWBD4q38MBUsrjp5W9RkNvbYN2gGI, titled "ubuntu").
+The machine it was built on has an SSH key for another account. A GitHub SSH key can
+belong to only one account, so use the key that belongs to your GitHub user.
 
 ------------------------------------------------------------
 STEP 1 - Create the repo on GitHub (skip if it already exists)
 ------------------------------------------------------------
-Sign in as kkjjkamal123 and go to:  https://github.com/new
-  - Repository name : kkjjkamal123.github.io
+Sign in to GitHub and go to:  https://github.com/new
+  - Repository name : your choice
   - Visibility      : Public
   - Do NOT add a README / .gitignore / license (this repo already has them)
 
@@ -23,14 +21,14 @@ STEP 2 - Point this repo at it and push
 ------------------------------------------------------------
 Open a terminal in this folder, then (SSH):
 
-    git remote add origin git@github.com:kkjjkamal123/kkjjkamal123.github.io.git
+    git remote add origin git@github.com:YOUR_USERNAME/YOUR_REPO.git
     git push -u origin main
 
 Or over HTTPS with a personal access token:
 
-    git remote add origin https://github.com/kkjjkamal123/kkjjkamal123.github.io.git
+    git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
     git push -u origin main
-    # username: kkjjkamal123   password: <your personal access token>
+    # username: YOUR_USERNAME   password: <your personal access token>
 
 ------------------------------------------------------------
 STEP 3 - Turn on GitHub Pages
@@ -38,12 +36,11 @@ STEP 3 - Turn on GitHub Pages
 Repo -> Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
 
 The included workflow (.github/workflows/deploy.yml) builds and publishes on every
-push to main.  Live URL:   https://kkjjkamal123.github.io/
+push to main.  Live URL:   https://kkjj.me/
 
-IMPORTANT - the repo name must match the base path:
-  - User site (kkjjkamal123.github.io) -> keep VITE_BASE: /
-  - Project site (anything else)       -> edit .github/workflows/deploy.yml ->
-                                         VITE_BASE: /<that-name>/
+IMPORTANT - for the custom domain, keep VITE_BASE: /
+  - Custom domain (kkjj.me) -> keep VITE_BASE: /
+  - Other GitHub Pages setups -> edit .github/workflows/deploy.yml accordingly
 
 ------------------------------------------------------------
 EASIEST ALTERNATIVE - Vercel (no base-path juggling)

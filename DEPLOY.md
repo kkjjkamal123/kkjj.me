@@ -24,7 +24,7 @@ A workflow is included at `.github/workflows/deploy.yml` that builds and publish
 
 ### 1. Set the base path
 
-This repository is a **user site** at `https://kkjjkamal123.github.io`, so Vite must build for the
+This repository is published to the custom domain `https://kkjj.me`, so Vite must build for the
 root path. The workflow sets it via `VITE_BASE`:
 
 ```yaml
@@ -33,6 +33,7 @@ root path. The workflow sets it via `VITE_BASE`:
     VITE_BASE: /                # 👈 root path for a user site
 ```
 
+- **Custom domain** (`https://kkjj.me`) → `VITE_BASE: /`
 - **User site** (`<user>.github.io`) → `VITE_BASE: /`
 - **Project site** (`<user>.github.io/<repo>/`) → set `VITE_BASE: /<repo>/`
 
@@ -49,7 +50,7 @@ git push origin main
 ```
 
 The **Actions** tab will show the build; when it finishes, your site is live at
-`https://kkjjkamal123.github.io/`. You can also re-run it manually from
+`https://kkjj.me/`. You can also re-run it manually from
 **Actions → Deploy to GitHub Pages → Run workflow**.
 
 ---
@@ -65,8 +66,8 @@ The **Actions** tab will show the build; when it finishes, your site is live at
 ## Custom domain
 
 - **Vercel/Netlify:** add the domain in the dashboard and follow the DNS instructions.
-- **GitHub Pages:** add a `CNAME` file to `public/` containing your domain (e.g. `kamalesh.dev`),
-  keep `VITE_BASE: /` for a user site, and configure DNS per GitHub's docs.
+- **GitHub Pages:** add a `CNAME` file to `public/` containing your domain (here `kkjj.me`),
+  keep `VITE_BASE: /`, and configure DNS per GitHub's docs.
 
 ---
 

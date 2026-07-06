@@ -10,8 +10,7 @@
 
 The site is **finished and builds cleanly**, and it is committed to git locally with a
 clean author line (no co-author or third-party attribution). It has **not been pushed to
-GitHub yet** — the build machine can only authenticate as `shakthisharavan`, not
-`kkjjkamal123`. Everything needed to push it is in **`PUSH.txt`**.
+GitHub yet** from this environment. Everything needed to publish it is in **`PUSH.txt`**.
 
 ---
 
@@ -20,12 +19,12 @@ GitHub yet** — the build machine can only authenticate as `shakthisharavan`, n
 1. **Verified the production build.** `npm run build` succeeds — 440 modules,
    ~313 kB raw / ~99 kB gzipped JS + ~1 kB CSS. No errors or warnings.
 2. **Initialised git and committed** on branch `main`:
-   - Author: `Kamalesh VS <vishnuvardhanks113@gmail.com>` — sole author, no co-author
+   - Author: `Kamalesh VS` — sole author, no co-author
      or third-party attribution in the commit or in any source file (verified by
      scanning every `.jsx/.js/.html/.css/.md/.json/.svg/.yml`).
 3. **Saved a full local copy** to `~/Desktop/portfolio` — includes `node_modules`
    (so it builds/runs offline) and the `.git` history (so it is push-ready).
-4. **Added `PUSH.txt`** — step-by-step instructions to push to kkjjkamal123 and turn on Pages.
+4. **Added `PUSH.txt`** — step-by-step instructions to push and turn on Pages.
 5. **Packaged a lean zip** (`~/Desktop/portfolio.zip`, without `node_modules`) for
    transferring to another machine.
 
@@ -33,17 +32,15 @@ GitHub yet** — the build machine can only authenticate as `shakthisharavan`, n
 
 ## Why it wasn't pushed
 
-A GitHub SSH key belongs to exactly one account. The build machine's key authenticates
-as `shakthisharavan`. The kkjjkamal123 key
-(`SHA256:scF1cidpof0oWhZWBD4q38MBUsrjp5W9RkNvbYN2gGI`, titled "ubuntu") is not present
-on it, so pushing as kkjjkamal123 is not possible from there. → See `PUSH.txt`.
+A GitHub SSH key belongs to exactly one account. If you are pushing from a different
+machine, use the SSH or HTTPS credentials for your own GitHub account. → See `PUSH.txt`.
 
 ## How to finish (short version)
 
-On a machine that has the kkjjkamal123 key, from inside the project folder:
+On a machine that can authenticate to your GitHub repo, from inside the project folder:
 
 ```bash
-git remote add origin git@github.com:kkjjkamal123/portfolio.git
+git remote add origin git@github.com:YOUR_USERNAME/YOUR_REPO.git
 git push -u origin main
 ```
 

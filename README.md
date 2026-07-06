@@ -1,6 +1,6 @@
-# kkjjkamal123.github.io
+# kkjj.me
 
-A fast, dark, single-page developer portfolio inspired by [landonorris.com](https://www.landonorris.com).
+A fast, dark, single-page developer portfolio for Kamalesh VS, inspired by [landonorris.com](https://www.landonorris.com).
 Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub integration** and an animated
 **rocket project spotlight** (building · aerodynamics · telemetry).
 
@@ -135,9 +135,10 @@ See **[DEPLOY.md](./DEPLOY.md)** for full instructions. Short version:
 
 - **Vercel** — import the repo; zero config (uses `vercel.json`).
 - **GitHub Pages** — push to `main`; the included workflow builds and deploys automatically.
+- **Custom domain** — the published site uses `kkjj.me` via a `CNAME` file in `public/`.
 
 ---
 
 ## 📝 License
 
-Personal project — all rights reserved by Kamalesh VS unless stated otherwise.
+MIT License. See [LICENSE](./LICENSE).

@@ -1,4 +1,4 @@
-# Project Report — Kamalesh VS Portfolio
+# Project Report — kkjj.me Portfolio
 
 **Prepared:** 16 June 2026
 **Owner:** Kamalesh VS ([@kkjjkamal123](https://github.com/kkjjkamal123))

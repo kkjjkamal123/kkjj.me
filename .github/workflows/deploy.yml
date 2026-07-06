@@ -26,7 +26,7 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          # User site deployment: https://kkjjkamal123.github.io
+          # Custom-domain deployment: https://kkjj.me
           # Vite should serve assets from the root path.
           VITE_BASE: /
       - uses: actions/configure-pages@v5
