@@ -110,7 +110,7 @@ Defined as CSS variables in `src/index.css`:
 - `npm run build` → **440 modules**, output ~**313 kB raw / ~99 kB gzipped** JS + ~1 kB CSS.
 - **Vercel:** zero-config via `vercel.json` (framework `vite`, SPA rewrite).
 - **GitHub Pages:** `.github/workflows/deploy.yml` builds and publishes on push to `main`. `vite.config.js`
-  reads `VITE_BASE` so the base path is correct for a project site. See `DEPLOY.md`.
+  reads `VITE_BASE` so the base path stays `/` for the `kkjj.me` custom domain. See `DEPLOY.md`.
 
 ---
 
@@ -135,4 +135,5 @@ Defined as CSS variables in `src/index.css`:
 2. **Add rocket links** — fill `PROJECT.links.demo` / `.repo` when available.
 3. **Replace telemetry preview** with a real feed if/when the rocket streams data.
 4. **Confirm the LinkedIn URL** in `Contact.jsx` (currently a generic `linkedin.com`).
-5. **Pick a Pages base** — set `VITE_BASE` in the workflow to match your repo name (or `/` for a user site).
+5. **Keep the Pages base at `/`** — the repo is deployed on the `kkjj.me` custom domain, so the workflow
+   should continue using `VITE_BASE: /`.

@@ -63,7 +63,7 @@ npm run preview  # preview the production build locally
 ## 📁 Project structure
 
 ```
-portfolio/
+kkjj-me/
 ├── public/
 │   └── favicon.svg            # rocket favicon
 ├── src/
@@ -133,9 +133,9 @@ It will also appear automatically in the Projects grid once it's a public repo o
 
 See **[DEPLOY.md](./DEPLOY.md)** for full instructions. Short version:
 
-- **Vercel** — import the repo; zero config (uses `vercel.json`).
 - **GitHub Pages** — push to `main`; the included workflow builds and deploys automatically.
-- **Custom domain** — the published site uses `kkjj.me` via a `CNAME` file in `public/`.
+- **Custom domain** — `kkjj.me` is registered with Namecheap and pointed at GitHub Pages.
+- **Vercel** — still works as a fallback if you want to import the repo there later.
 
 ---
 

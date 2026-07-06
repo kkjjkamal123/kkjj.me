@@ -1,73 +1,40 @@
 # Deployment Guide
 
 This site is a static SPA — `npm run build` produces a `dist/` folder you can host anywhere.
-Two paths are pre-configured: **Vercel** and **GitHub Pages**.
+GitHub Pages is the primary deployment target for the `kkjj.me` domain. Vercel still works as an
+optional fallback.
 
 ---
 
-## Option A — Vercel (recommended, easiest)
+## Option A — GitHub Pages + Namecheap DNS
 
-1. Push this project to a GitHub repo.
-2. Go to [vercel.com/new](https://vercel.com/new) and **import** the repo.
-3. Vercel auto-detects Vite. Settings (already covered by `vercel.json`):
-   - Build command: `npm run build`
-   - Output directory: `dist`
-4. Click **Deploy**. You get a `*.vercel.app` URL; every push to `main` redeploys.
+1. Push this project to the `kkjj.me` GitHub repo.
+2. In GitHub repo settings, set **Pages** to **GitHub Actions**.
+3. In Namecheap DNS, add these records:
+   - `A` `@` → `185.199.108.153`
+   - `A` `@` → `185.199.109.153`
+   - `A` `@` → `185.199.110.153`
+   - `A` `@` → `185.199.111.153`
+   - `CNAME` `www` → `kkjjkamal123.github.io`
+4. Keep the `public/CNAME` file set to `kkjj.me`.
+5. Commit and push. GitHub Actions will build and deploy the site.
 
-No base-path changes are needed — Vercel serves from `/`.
-
----
-
-## Option B — GitHub Pages (free, via included CI)
-
-A workflow is included at `.github/workflows/deploy.yml` that builds and publishes automatically.
-
-### 1. Set the base path
-
-This repository is published to the custom domain `https://kkjj.me`, so Vite must build for the
-root path. The workflow sets it via `VITE_BASE`:
-
-```yaml
-- run: npm run build
-  env:
-    VITE_BASE: /                # 👈 root path for a user site
-```
-
-- **Custom domain** (`https://kkjj.me`) → `VITE_BASE: /`
-- **User site** (`<user>.github.io`) → `VITE_BASE: /`
-- **Project site** (`<user>.github.io/<repo>/`) → set `VITE_BASE: /<repo>/`
-
-### 2. Enable Pages
-
-In the repo: **Settings → Pages → Build and deployment → Source → GitHub Actions**.
-
-### 3. Push
-
-```bash
-git add .
-git commit -m "Deploy portfolio"
-git push origin main
-```
-
-The **Actions** tab will show the build; when it finishes, your site is live at
-`https://kkjj.me/`. You can also re-run it manually from
-**Actions → Deploy to GitHub Pages → Run workflow**.
+GitHub Pages serves the site from `/` because `kkjj.me` is a custom domain, so no base-path prefix
+is needed.
 
 ---
 
-## Option C — Netlify
+## Option B — Vercel
 
-1. [app.netlify.com](https://app.netlify.com) → **Add new site → Import an existing project**.
-2. Build command `npm run build`, publish directory `dist`.
-3. Deploy. (Add a `_redirects` file with `/* /index.html 200` if you later add client-side routing.)
+1. [vercel.com/new](https://vercel.com/new) → import the repo.
+2. Leave the build command as `npm run build` and the output directory as `dist`.
+3. Deploy. Vercel serves from `/`, so the existing config works as-is.
 
----
+## Notes
 
-## Custom domain
-
-- **Vercel/Netlify:** add the domain in the dashboard and follow the DNS instructions.
-- **GitHub Pages:** add a `CNAME` file to `public/` containing your domain (here `kkjj.me`),
-  keep `VITE_BASE: /`, and configure DNS per GitHub's docs.
+- If GitHub Pages shows a failed run, first verify the Namecheap DNS records above.
+- The `www` record is optional, but recommended so `www.kkjj.me` can be redirected later if you want.
+- The `CNAME` file must stay in `public/` because Vite only publishes files from that folder into `dist/`.
 
 ---
 

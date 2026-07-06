@@ -22,10 +22,10 @@ GitHub yet** from this environment. Everything needed to publish it is in **`PUS
    - Author: `Kamalesh VS` — sole author, no co-author
      or third-party attribution in the commit or in any source file (verified by
      scanning every `.jsx/.js/.html/.css/.md/.json/.svg/.yml`).
-3. **Saved a full local copy** to `~/Desktop/portfolio` — includes `node_modules`
+3. **Saved a full local copy** to `~/Desktop/kkjj-me` — includes `node_modules`
    (so it builds/runs offline) and the `.git` history (so it is push-ready).
 4. **Added `PUSH.txt`** — step-by-step instructions to push and turn on Pages.
-5. **Packaged a lean zip** (`~/Desktop/portfolio.zip`, without `node_modules`) for
+5. **Packaged a lean zip** (`~/Desktop/kkjj-me.zip`, without `node_modules`) for
    transferring to another machine.
 
 ---
@@ -64,6 +64,6 @@ HTTPS/Vercel alternatives are in `PUSH.txt` and `DEPLOY.md`.
 | File | What it is |
 |------|-----------|
 | `PUSH.txt` | How to push to GitHub + enable Pages (read first) |
-| `DEPLOY.md` | Vercel / GitHub Pages / Netlify deployment options |
+| `DEPLOY.md` | GitHub Pages + Namecheap DNS deployment options |
 | `REPORT.md` | Full feature and design write-up |
 | `README.md` | Local dev quickstart |

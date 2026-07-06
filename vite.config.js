@@ -4,9 +4,8 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 //
 // `base` controls the public path the app is served from.
-//  - '/'           → Vercel, Netlify, a custom domain, or a user/org Pages site
-//                    (e.g. kkjjkamal123.github.io)
-//  - '/portfolio/' → a GitHub Pages *project* site (kkjjkamal123.github.io/portfolio)
+//  - '/'     → Vercel, Netlify, or a custom domain like kkjj.me
+//  - '/repo/' → a GitHub Pages project site
 // The GitHub Pages workflow sets VITE_BASE for you; locally it stays '/'.
 export default defineConfig({
   base: process.env.VITE_BASE || '/',
