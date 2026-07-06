@@ -98,7 +98,7 @@ export default function Contact() {
             >
               <Magnetic range={80} strength={0.3}>
                 <a
-                  href="mailto:vishnuvardhanks113@gmail.com"
+                  href="mailto:kkjjwork123@gmail.com"
                   data-cursor="Email"
                   style={{
                     display: 'inline-flex',
