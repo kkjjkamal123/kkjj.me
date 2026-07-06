@@ -10,13 +10,24 @@ Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub int
 
 ## ✨ Features
 
+- **Custom cursor** — a spring-driven dot + ring that morphs into a contextual label (`View`, `Open`, `Email`...)
+  over interactive elements, via `data-cursor` attributes. Disabled automatically on touch devices.
+- **Buttery smooth scroll** powered by [Lenis](https://github.com/darkroomengineering/lenis).
+- **Preloader** with a live percentage counter that wipes away into the page on first load.
+- **Kinetic typography** — per-word mask reveals (`RevealText`) and a hover scramble effect (`ScrambleText`)
+  on key headlines, set in **Clash Display**.
+- **Magnetic buttons & links** that pull toward the cursor within range, and **3D tilt** on project/telemetry
+  cards that tracks pointer position.
+- **Marquee tickers** for the hero role strip, the skills toolkit (alternating directions per row), and the footer CTA.
+- **Film-grain overlay** + a top scroll-progress bar + a scroll-spy nav pill that slides between active sections.
+- **Editorial layout** — oversized faded section numerals, asymmetric grids, and a watermark headline instead of
+  a centered "hero card" template.
 - **Animated rocket spotlight** — SVG rocket with a blue-plasma flame, a twinkling starfield, focus-area
   cards, and a looping **telemetry preview panel** (clearly tagged `PREVIEW` — illustrative, not real flight data).
 - **Live GitHub integration** — pulls your real profile + repos from the GitHub API on load, with your data
-  baked in as a fallback so it never breaks or rate-limits. Shows a stats strip, language-coloured repo cards,
-  star counts, a "LIVE" badge, and your contribution graph.
-- **Scroll-triggered animations** throughout via Framer Motion's `useInView`.
-- **Fully responsive** with a frosted-glass navbar and a mobile hamburger menu.
+  baked in as a fallback so it never breaks or rate-limits. Shows a stats strip with count-up numbers,
+  language-coloured repo cards, star counts, a "LIVE" badge, and your contribution graph.
+- **Fully responsive** with a frosted, pill-shaped navbar and a mobile hamburger menu.
 - **SEO + social ready** — Open Graph / Twitter meta tags, SVG favicon, theme color.
 - **Zero CSS framework** — design tokens live in CSS variables; components are styled inline.
 
@@ -26,12 +37,13 @@ Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub int
 
 | Layer         | Choice                          |
 |---------------|---------------------------------|
-| Framework     | React 18                        |
-| Build tool    | Vite 4                          |
-| Animation     | Framer Motion                   |
-| Fonts         | Space Grotesk + Inter (Google)  |
-| Data          | GitHub REST API (live, no key)  |
-| Contrib graph | ghchart.rshah.org               |
+| Framework     | React 18                                          |
+| Build tool    | Vite 4                                            |
+| Animation     | Framer Motion                                     |
+| Smooth scroll | Lenis                                             |
+| Fonts         | Clash Display + General Sans (Fontshare), fallback Space Grotesk + Inter (Google) |
+| Data          | GitHub REST API (live, no key)                    |
+| Contrib graph | ghchart.rshah.org                                 |
 
 ---
 
@@ -58,14 +70,25 @@ portfolio/
 │   ├── lib/
 │   │   └── github.js          # live GitHub fetch hook + fallback data + helpers
 │   ├── components/
-│   │   ├── Navbar.jsx         # fixed nav, frosted on scroll, mobile menu
-│   │   ├── Hero.jsx           # full-screen intro
+│   │   ├── Navbar.jsx         # floating pill nav, scroll-spy active link, mobile menu
+│   │   ├── Hero.jsx           # kinetic intro, cursor-reactive glow, role marquee
 │   │   ├── FeaturedRocket.jsx # 🚀 animated rocket + telemetry spotlight
-│   │   ├── About.jsx          # bio + live stats
+│   │   ├── About.jsx          # bio + live count-up stats
 │   │   ├── Projects.jsx       # live GitHub repos + stats + contribution graph
-│   │   ├── Skills.jsx         # skill categories
+│   │   ├── Skills.jsx         # alternating marquee skill rows
 │   │   ├── Contact.jsx        # contact + social links
-│   │   └── Footer.jsx
+│   │   ├── Footer.jsx
+│   │   ├── Cursor.jsx         # custom dot + label cursor
+│   │   ├── SmoothScroll.jsx   # Lenis wrapper
+│   │   ├── Noise.jsx          # film-grain overlay
+│   │   ├── Preloader.jsx      # intro percentage counter
+│   │   ├── ScrollProgress.jsx # top scroll progress bar
+│   │   ├── Magnetic.jsx       # cursor-pull wrapper for buttons/links
+│   │   ├── Tilt.jsx           # 3D pointer-tracking tilt wrapper
+│   │   ├── Marquee.jsx        # infinite horizontal scroll band
+│   │   ├── RevealText.jsx     # per-word mask reveal
+│   │   ├── ScrambleText.jsx   # hover glyph-scramble text
+│   │   └── Counter.jsx        # count-up number on scroll into view
 │   ├── App.jsx                # composes sections, fetches GitHub once
 │   ├── index.css             # design tokens (CSS variables) + resets
 │   └── main.jsx

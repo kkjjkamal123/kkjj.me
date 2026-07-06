@@ -1,24 +1,79 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import Marquee from './Marquee'
+import RevealText from './RevealText'
 
 const categories = [
   {
     label: 'Languages & Web',
-    skills: ['Python', 'C++', 'JavaScript', 'HTML / CSS', 'React'],
+    skills: ['Python', 'C++', 'JavaScript', 'HTML / CSS'],
+    dir: 'normal',
   },
   {
     label: 'AI & Computer Vision',
-    skills: ['YOLOv8', 'OpenCV', 'PyTorch', 'INT8 Quantization', 'Supervision', 'Semantic Search', 'Embeddings'],
+    skills: ['YOLOv8', 'OpenCV', 'PyTorch', 'INT8 Quantization', 'Supervision', 'Semantic Search'],
+    dir: 'reverse',
   },
   {
     label: 'Embedded & Hardware',
-    skills: ['Raspberry Pi 5', 'Arduino', 'BMS Design', 'KiCad / Circuits', 'Sensors & IMU', 'Microcontrollers'],
+    skills: ['Raspberry Pi Series', 'Arduino Series', 'Jetson Series', 'KiCad', 'Flightcontrollers'],
+    dir: 'normal',
   },
   {
     label: 'Aerospace & Tools',
-    skills: ['Aerodynamics', 'Telemetry', 'Flight Dynamics', 'Git', 'Linux', 'Docker'],
+    skills: ['Aerodynamics', 'Telemetry', 'Flight Dynamics', 'Git', 'Linux', 'OpenRocket', 'Solidworks', 'Ansys Fluent'],
+    dir: 'reverse',
   },
 ]
+
+function SkillRow({ cat, index, inView }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: 0.15 + index * 0.1 }}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '220px 1fr',
+        alignItems: 'center',
+        gap: '1.5rem',
+        padding: '1.5rem 0',
+        borderBottom: '1px solid var(--border)',
+      }}
+      className="skill-row"
+    >
+      <h3 style={{
+        fontSize: '0.78rem',
+        fontWeight: 700,
+        letterSpacing: '0.12em',
+        textTransform: 'uppercase',
+        color: 'var(--text-dim)',
+      }}>
+        {String(index + 1).padStart(2, '0')} — {cat.label}
+      </h3>
+      <Marquee duration={cat.skills.length * 4} direction={cat.dir}>
+        {cat.skills.map((skill) => (
+          <span
+            key={skill}
+            data-cursor="Skill"
+            style={{
+              padding: '0.55rem 1.3rem',
+              border: '1px solid var(--border)',
+              borderRadius: 100,
+              fontSize: '0.95rem',
+              fontWeight: 500,
+              color: '#ddd',
+              whiteSpace: 'nowrap',
+              fontFamily: 'var(--display)',
+            }}
+          >
+            {skill}
+          </span>
+        ))}
+      </Marquee>
+    </motion.div>
+  )
+}
 
 export default function Skills() {
   const ref = useRef(null)
@@ -31,7 +86,6 @@ export default function Skills() {
       position: 'relative',
       overflow: 'hidden',
     }}>
-      {/* Background accent */}
       <div style={{
         position: 'absolute',
         bottom: '-20%',
@@ -43,84 +97,40 @@ export default function Skills() {
       }} />
 
       <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative' }}>
-        <motion.p
-          initial={{ opacity: 0, x: -20 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '1rem' }}
-        >
-          Skills
-        </motion.p>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontSize: 'clamp(2rem, 5vw, 3rem)',
-            fontWeight: 700,
-            letterSpacing: '-0.03em',
-            marginBottom: '3.5rem',
-          }}
-        >
-          My toolkit
-        </motion.h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+          <span style={{ display: 'inline-block', width: '28px', height: '1px', background: 'var(--accent)' }} />
+          <motion.p
+            initial={{ opacity: 0, x: -16 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase' }}
+          >
+            Skills
+          </motion.p>
+        </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem' }}>
-          {categories.map((cat, ci) => (
-            <motion.div
-              key={cat.label}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 + ci * 0.15 }}
-            >
-              <h3 style={{
-                fontSize: '0.78rem',
-                fontWeight: 700,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: 'var(--text-dim)',
-                marginBottom: '1.25rem',
-              }}>
-                {cat.label}
-              </h3>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
-                {cat.skills.map((skill, si) => (
-                  <motion.span
-                    key={skill}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={inView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ duration: 0.4, delay: 0.35 + ci * 0.1 + si * 0.04 }}
-                    style={{
-                      padding: '0.45rem 1rem',
-                      background: 'rgba(255,255,255,0.04)',
-                      border: '1px solid var(--border)',
-                      borderRadius: '6px',
-                      fontSize: '0.83rem',
-                      fontWeight: 500,
-                      color: '#ccc',
-                      transition: 'all 0.2s',
-                      cursor: 'default',
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.background = 'var(--accent-dim)'
-                      e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)'
-                      e.currentTarget.style.color = 'var(--accent)'
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
-                      e.currentTarget.style.borderColor = 'var(--border)'
-                      e.currentTarget.style.color = '#ccc'
-                    }}
-                  >
-                    {skill}
-                  </motion.span>
-                ))}
-              </div>
-            </motion.div>
+        <h2 style={{
+          fontFamily: 'var(--display)',
+          fontSize: 'clamp(2.2rem, 5.5vw, 3.5rem)',
+          fontWeight: 700,
+          letterSpacing: '-0.03em',
+          marginBottom: '3rem',
+        }}>
+          <RevealText text="My toolkit" inView={inView} delay={0.05} />
+        </h2>
+
+        <div>
+          {categories.map((cat, i) => (
+            <SkillRow key={cat.label} cat={cat} index={i} inView={inView} />
           ))}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 700px) {
+          .skill-row { grid-template-columns: 1fr !important; gap: 0.75rem !important; }
+        }
+      `}</style>
     </section>
   )
 }

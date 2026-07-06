@@ -1,5 +1,8 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import RevealText from './RevealText'
+import ScrambleText from './ScrambleText'
+import Magnetic from './Magnetic'
 
 const socials = [
   {
@@ -14,8 +17,8 @@ const socials = [
   },
   {
     name: 'Email',
-    handle: 'vishnuvardhanks113@gmail.com',
-    url: 'mailto:vishnuvardhanks113@gmail.com',
+    handle: 'kkjjwork123@gmail.com',
+    url: 'mailto:kkjjwork123@gmail.com',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -39,69 +42,81 @@ export default function Contact() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="contact" ref={ref} style={{ padding: 'clamp(5rem, 10vw, 10rem) clamp(1.5rem, 6vw, 8rem)' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        <motion.p
-          initial={{ opacity: 0, x: -20 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '1rem' }}
-        >
-          Contact
-        </motion.p>
+    <section id="contact" ref={ref} style={{ padding: 'clamp(5rem, 10vw, 10rem) clamp(1.5rem, 6vw, 8rem)', position: 'relative', overflow: 'hidden' }}>
+      <span
+        aria-hidden="true"
+        style={{
+          position: 'absolute', top: '-2rem', left: 'clamp(1rem, 4vw, 4rem)',
+          fontFamily: 'var(--display)', fontSize: 'clamp(6rem, 16vw, 13rem)', fontWeight: 700,
+          color: 'transparent', WebkitTextStroke: '1px rgba(255,255,255,0.05)', lineHeight: 1, zIndex: 0,
+        }}
+      >
+        03
+      </span>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '5rem', alignItems: 'start' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+          <span style={{ display: 'inline-block', width: '28px', height: '1px', background: 'var(--accent)' }} />
+          <motion.p
+            initial={{ opacity: 0, x: -16 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase' }}
+          >
+            Contact
+          </motion.p>
+        </div>
+
+        <h2 style={{
+          fontFamily: 'var(--display)',
+          fontSize: 'clamp(2.6rem, 8vw, 5.5rem)',
+          fontWeight: 700,
+          lineHeight: 0.98,
+          letterSpacing: '-0.03em',
+          marginBottom: '3rem',
+        }}>
+          <RevealText text="Let's build something" inView={inView} delay={0.1} />
+          <RevealText text="together." inView={inView} delay={0.25} wordStyle={{ color: 'var(--accent)' }} />
+        </h2>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(2rem, 6vw, 5rem)', alignItems: 'start' }} className="contact-grid">
           <div>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                fontWeight: 700,
-                lineHeight: 1.1,
-                letterSpacing: '-0.03em',
-                marginBottom: '1.5rem',
-              }}
-            >
-              Let's build<br />something<br /><span style={{ color: 'var(--accent)' }}>together.</span>
-            </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.75, maxWidth: '380px' }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              style={{ fontSize: '1.05rem', color: 'var(--text-muted)', lineHeight: 1.75, maxWidth: '420px', marginBottom: '2.5rem' }}
             >
-              Whether you have a project in mind, want to collaborate, or just want to say hi — my inbox is always open.
+              Whether you have a project in mind, want to collaborate or just want to say hi
+              — my inbox is always open.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              style={{ marginTop: '2.5rem' }}
+              transition={{ duration: 0.6, delay: 0.5 }}
             >
-              <a
-                href="mailto:vishnuvardhanks113@gmail.com"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.9rem 2.2rem',
-                  background: 'var(--accent)',
-                  color: '#fff',
-                  fontWeight: 600,
-                  fontSize: '0.9rem',
-                  borderRadius: '8px',
-                  transition: 'all 0.25s',
-                  letterSpacing: '0.02em',
-                }}
-                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
-                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-              >
-                Send me an email
-              </a>
+              <Magnetic range={80} strength={0.3}>
+                <a
+                  href="mailto:vishnuvardhanks113@gmail.com"
+                  data-cursor="Email"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.6rem',
+                    padding: '1.1rem 2.4rem',
+                    background: 'var(--accent)',
+                    color: '#fff',
+                    fontWeight: 600,
+                    fontSize: '1rem',
+                    borderRadius: 100,
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  <ScrambleText text="Send me an email" />
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
+                </a>
+              </Magnetic>
             </motion.div>
           </div>
 
@@ -121,9 +136,11 @@ export default function Contact() {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-cursor="Open"
                   initial={{ opacity: 0, x: 20 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
                   transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
+                  whileHover={{ x: 6 }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -131,18 +148,7 @@ export default function Contact() {
                     padding: '1.1rem 1.5rem',
                     background: 'var(--card)',
                     border: '1px solid var(--border)',
-                    borderRadius: '10px',
-                    transition: 'all 0.25s',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = 'rgba(59,130,246,0.35)'
-                    e.currentTarget.style.background = '#141414'
-                    e.currentTarget.style.transform = 'translateX(4px)'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = 'var(--border)'
-                    e.currentTarget.style.background = 'var(--card)'
-                    e.currentTarget.style.transform = 'translateX(0)'
+                    borderRadius: 'var(--radius)',
                   }}
                 >
                   <span style={{ color: 'var(--accent)' }}>{s.icon}</span>
@@ -159,6 +165,12 @@ export default function Contact() {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 760px) {
+          .contact-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   )
 }

@@ -14,7 +14,7 @@ Run the steps below where the kkjjkamal123 key lives
 STEP 1 - Create the repo on GitHub (skip if it already exists)
 ------------------------------------------------------------
 Sign in as kkjjkamal123 and go to:  https://github.com/new
-  - Repository name : portfolio
+  - Repository name : kkjjkamal123.github.io
   - Visibility      : Public
   - Do NOT add a README / .gitignore / license (this repo already has them)
 
@@ -23,12 +23,12 @@ STEP 2 - Point this repo at it and push
 ------------------------------------------------------------
 Open a terminal in this folder, then (SSH):
 
-    git remote add origin git@github.com:kkjjkamal123/portfolio.git
+    git remote add origin git@github.com:kkjjkamal123/kkjjkamal123.github.io.git
     git push -u origin main
 
 Or over HTTPS with a personal access token:
 
-    git remote add origin https://github.com/kkjjkamal123/portfolio.git
+    git remote add origin https://github.com/kkjjkamal123/kkjjkamal123.github.io.git
     git push -u origin main
     # username: kkjjkamal123   password: <your personal access token>
 
@@ -38,13 +38,12 @@ STEP 3 - Turn on GitHub Pages
 Repo -> Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
 
 The included workflow (.github/workflows/deploy.yml) builds and publishes on every
-push to main.  Live URL:   https://kkjjkamal123.github.io/portfolio/
+push to main.  Live URL:   https://kkjjkamal123.github.io/
 
 IMPORTANT - the repo name must match the base path:
-  - Repo named "portfolio"            -> leave VITE_BASE: /portfolio/  (already set)
-  - Repo named something else         -> edit .github/workflows/deploy.yml ->
+  - User site (kkjjkamal123.github.io) -> keep VITE_BASE: /
+  - Project site (anything else)       -> edit .github/workflows/deploy.yml ->
                                          VITE_BASE: /<that-name>/
-  - User site (kkjjkamal123.github.io) -> set VITE_BASE: /
 
 ------------------------------------------------------------
 EASIEST ALTERNATIVE - Vercel (no base-path juggling)

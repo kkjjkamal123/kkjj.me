@@ -24,18 +24,17 @@ A workflow is included at `.github/workflows/deploy.yml` that builds and publish
 
 ### 1. Set the base path
 
-GitHub Pages serves a **project** repo from `https://<user>.github.io/<repo>/`, so Vite needs to know
-the sub-path. The workflow sets it via `VITE_BASE`:
+This repository is a **user site** at `https://kkjjkamal123.github.io`, so Vite must build for the
+root path. The workflow sets it via `VITE_BASE`:
 
 ```yaml
 - run: npm run build
   env:
-    VITE_BASE: /portfolio/      # 👈 change "portfolio" to your repo name
+    VITE_BASE: /                # 👈 root path for a user site
 ```
 
-- Repo named `portfolio` → `VITE_BASE: /portfolio/`
-- Repo named something else → match it, e.g. `/my-site/`
-- **User site** (`<user>.github.io`) → set `VITE_BASE: /`
+- **User site** (`<user>.github.io`) → `VITE_BASE: /`
+- **Project site** (`<user>.github.io/<repo>/`) → set `VITE_BASE: /<repo>/`
 
 ### 2. Enable Pages
 
@@ -50,7 +49,7 @@ git push origin main
 ```
 
 The **Actions** tab will show the build; when it finishes, your site is live at
-`https://kkjjkamal123.github.io/<repo>/`. You can also re-run it manually from
+`https://kkjjkamal123.github.io/`. You can also re-run it manually from
 **Actions → Deploy to GitHub Pages → Run workflow**.
 
 ---
@@ -67,7 +66,7 @@ The **Actions** tab will show the build; when it finishes, your site is live at
 
 - **Vercel/Netlify:** add the domain in the dashboard and follow the DNS instructions.
 - **GitHub Pages:** add a `CNAME` file to `public/` containing your domain (e.g. `kamalesh.dev`),
-  set `VITE_BASE: /`, and configure DNS per GitHub's docs.
+  keep `VITE_BASE: /` for a user site, and configure DNS per GitHub's docs.
 
 ---
 

@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
+import Magnetic from './Magnetic'
+import Tilt from './Tilt'
 
 // ── Edit these to rename / re-describe your rocket project ──────────────
 const PROJECT = {
@@ -227,6 +229,16 @@ export default function FeaturedRocket() {
         width: '70vw', height: '70vw', maxWidth: 900, maxHeight: 900,
         background: 'radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 60%)', pointerEvents: 'none',
       }} />
+      <span
+        aria-hidden="true"
+        style={{
+          position: 'absolute', top: '0.5rem', right: 'clamp(1rem, 4vw, 4rem)',
+          fontFamily: 'var(--display)', fontSize: 'clamp(6rem, 16vw, 13rem)', fontWeight: 700,
+          color: 'transparent', WebkitTextStroke: '1px rgba(255,255,255,0.05)', lineHeight: 1, zIndex: 0,
+        }}
+      >
+        00
+      </span>
 
       <div style={{ maxWidth: '1150px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <motion.div
@@ -257,7 +269,7 @@ export default function FeaturedRocket() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.1 }}
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: 'var(--display)',
                 fontSize: 'clamp(2.4rem, 6vw, 4.5rem)',
                 fontWeight: 700, lineHeight: 1.02, letterSpacing: '-0.03em', marginBottom: '1.25rem',
               }}
@@ -285,7 +297,7 @@ export default function FeaturedRocket() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.5, delay: 0.4 + i * 0.12 }}
-                  style={{ padding: '1.1rem 1.2rem', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border)', borderRadius: 10 }}
+                  style={{ padding: '1.1rem 1.2rem', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}
                 >
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '0.6rem' }}>
                     {focusIcon[f.icon]}
@@ -308,40 +320,40 @@ export default function FeaturedRocket() {
                   ? { label: 'Watch the build', href: PROJECT.links.demo }
                   : { label: 'Follow the build on GitHub', href: PROJECT.links.follow }
                 return (
-                  <a
-                    href={primary.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-                      padding: '0.85rem 2rem', background: 'var(--accent)', color: '#fff',
-                      fontWeight: 600, fontSize: '0.9rem', borderRadius: 8, letterSpacing: '0.02em',
-                      transition: 'transform 0.25s',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-                  >
-                    {primary.label}
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
-                  </a>
+                  <Magnetic range={70} strength={0.35}>
+                    <a
+                      href={primary.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-cursor="Watch"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                        padding: '0.85rem 2rem', background: 'var(--accent)', color: '#fff',
+                        fontWeight: 600, fontSize: '0.9rem', borderRadius: 100, letterSpacing: '0.02em',
+                      }}
+                    >
+                      {primary.label}
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
+                    </a>
+                  </Magnetic>
                 )
               })()}
               {PROJECT.links.repo && (
-                <a
-                  href={PROJECT.links.repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-                    padding: '0.85rem 2rem', background: 'transparent', color: '#fff',
-                    fontWeight: 600, fontSize: '0.9rem', borderRadius: 8, border: '1px solid var(--border)',
-                    transition: 'all 0.25s',
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)' }}
-                >
-                  View code
-                </a>
+                <Magnetic range={70} strength={0.35}>
+                  <a
+                    href={PROJECT.links.repo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-cursor="Code"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                      padding: '0.85rem 2rem', background: 'transparent', color: '#fff',
+                      fontWeight: 600, fontSize: '0.9rem', borderRadius: 100, border: '1px solid var(--border)',
+                    }}
+                  >
+                    View code
+                  </a>
+                </Magnetic>
               )}
             </motion.div>
           </div>
@@ -354,7 +366,9 @@ export default function FeaturedRocket() {
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}
           >
             <Rocket ignited={inView} />
-            <TelemetryPanel active={inView} />
+            <Tilt max={5} scale={1.01} style={{ width: '100%', maxWidth: 340 }}>
+              <TelemetryPanel active={inView} />
+            </Tilt>
           </motion.div>
         </div>
       </div>

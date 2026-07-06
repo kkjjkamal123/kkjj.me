@@ -26,9 +26,9 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          # For a project site at https://<user>.github.io/<repo>/ set this to "/<repo>/".
-          # If you deploy to a USER site (https://<user>.github.io) instead, change this to "/".
-          VITE_BASE: /portfolio/
+          # User site deployment: https://kkjjkamal123.github.io
+          # Vite should serve assets from the root path.
+          VITE_BASE: /
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

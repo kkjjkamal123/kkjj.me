@@ -1,36 +1,66 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=general-sans@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 :root {
-  --bg: #080808;
-  --bg-2: #111111;
-  --bg-3: #1a1a1a;
+  --bg: #060607;
+  --bg-2: #0c0d0f;
+  --bg-3: #15161a;
   --accent: #3B82F6;
+  --accent-2: #7c5cff;
   --accent-dim: rgba(59, 130, 246, 0.12);
   --accent-glow: rgba(59, 130, 246, 0.35);
-  --text: #ffffff;
-  --text-muted: #888888;
-  --text-dim: #444444;
-  --border: rgba(255, 255, 255, 0.07);
-  --card: #111111;
+  --text: #f5f6f8;
+  --text-muted: #8b8d97;
+  --text-dim: #45474f;
+  --border: rgba(255, 255, 255, 0.08);
+  --card: #0e0f12;
+  --radius: 1.1rem;
+  --display: 'Clash Display', 'Space Grotesk', sans-serif;
+  --body: 'General Sans', 'Inter', sans-serif;
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+html.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--body);
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+body.has-cursor,
+body.has-cursor a,
+body.has-cursor button {
+  cursor: none;
 }
 
 a {
@@ -43,10 +73,76 @@ button {
   border: none;
   background: none;
   font-family: inherit;
+  color: inherit;
 }
 
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+::-webkit-scrollbar {
+  width: 3px;
+}
 
-::selection { background: var(--accent); color: white; }
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+/* ── Grain overlay ───────────────────────────────────────────── */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
+
+/* ── Marquee ─────────────────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll var(--marquee-duration, 28s) linear infinite;
+  animation-direction: var(--marquee-direction, normal);
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-25%);
+  }
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@media (hover: none) {
+
+  body.has-cursor,
+  body.has-cursor a,
+  body.has-cursor button {
+    cursor: auto;
+  }
+}
