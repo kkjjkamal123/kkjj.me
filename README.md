@@ -38,7 +38,7 @@ Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub int
 | Layer         | Choice                          |
 |---------------|---------------------------------|
 | Framework     | React 18                                          |
-| Build tool    | Vite 4                                            |
+| Build tool    | Vite 8                                            |
 | Animation     | Framer Motion                                     |
 | Smooth scroll | Lenis                                             |
 | Fonts         | Clash Display + General Sans (Fontshare), fallback Space Grotesk + Inter (Google) |
@@ -56,7 +56,7 @@ npm run build    # production build → dist/
 npm run preview  # preview the production build locally
 ```
 
-> Requires Node 18+. (Vite 4 is pinned because the environment runs Node 18.)
+> Requires Node 18+. The current Vite 8 / React plugin combo is what the repo ships with now.
 
 ---
 

@@ -2,7 +2,7 @@
 
 **Date:** 16 June 2026
 **Owner:** Kamalesh VS ([@kkjjkamal123](https://github.com/kkjjkamal123))
-**Stack:** React 18 · Vite 4 · Framer Motion
+**Stack:** React 18 · Vite 8 · Framer Motion
 
 ---
 
