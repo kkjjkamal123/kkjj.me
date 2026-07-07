@@ -18,9 +18,9 @@ export default function Footer() {
   return (
     <footer style={{ borderTop: '1px solid var(--border)' }}>
       <div style={{ padding: '1.5rem 0', borderBottom: '1px solid var(--border)' }}>
-        <Marquee duration={20}>
-          {Array.from({ length: 4 }).map((_, i) => (
-            <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '3rem', fontFamily: 'var(--display)', fontSize: 'clamp(1.1rem, 2.5vw, 1.8rem)', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>
+        <Marquee duration={25}>
+          {PHRASES.map((phrase, i) => (
+            <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '3rem', fontFamily: 'var(--display)', fontSize: 'clamp(1.1rem, 2.5vw, 1.8rem)', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '-0.01em', whiteSpace: 'nowrap', marginRight: '3rem' }}>
               {phrase}
               <span style={{ color: 'var(--accent)' }}>&#9670;</span>
             </span>
@@ -36,7 +36,7 @@ export default function Footer() {
         flexWrap: 'wrap',
         gap: '1rem',
       }}>
-        <span style={{ fontFamily: 'var(--display)', fontWeight: 600, fontSize: '1rem', letterSpacing: '-0.02em' }}>
+        <span style={{ fontFamily: 'var(--display)', fontWeight: 600, fontSize: '1rem', letterSpacing: '-0.02em', color: 'var(--text)' }}>
           VSK<span style={{ color: 'var(--accent)' }}>.</span>
         </span>
         <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
