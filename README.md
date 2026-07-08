@@ -5,6 +5,7 @@ Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub int
 **rocket project spotlight** (building · aerodynamics · telemetry).
 
 > Live preview locally: `npm run dev` → http://localhost:5173
+ For the site check out https://kkjj.me
 
 ---
 
