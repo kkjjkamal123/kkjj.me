@@ -73,7 +73,7 @@ kkjj-me/
 │   ├── components/
 │   │   ├── Navbar.jsx         # floating pill nav, scroll-spy active link, mobile menu
 │   │   ├── Hero.jsx           # kinetic intro, cursor-reactive glow, role marquee
-│   │   ├── FeaturedRocket.jsx # 🚀 animated rocket + telemetry spotlight
+│   │   ├── FeaturedRocket.jsx # animated rocket + telemetry spotlight
 │   │   ├── About.jsx          # bio + live count-up stats
 │   │   ├── Projects.jsx       # live GitHub repos + stats + contribution graph
 │   │   ├── Skills.jsx         # alternating marquee skill rows
@@ -113,20 +113,6 @@ kkjj-me/
 | **Skills** | `categories` array in `src/components/Skills.jsx` |
 | **Contact links** | `socials` array in `src/components/Contact.jsx` |
 | **Page title / meta** | `index.html` |
-
-### Adding the rocket repo / demo
-
-When the rocket project goes public, open `src/components/FeaturedRocket.jsx` and fill in:
-
-```js
-links: {
-  demo: 'https://youtu.be/...',                  // shows a "Watch the build" button
-  repo: 'https://github.com/kkjjkamal123/rocket', // shows a "View code" button
-  follow: 'https://github.com/kkjjkamal123',
-}
-```
-
-It will also appear automatically in the Projects grid once it's a public repo on your GitHub.
 
 ---
 
