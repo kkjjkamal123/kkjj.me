@@ -1,9 +1,12 @@
 import { useEffect } from 'react'
 import Lenis from 'lenis'
+import { useAnimations } from './AnimationContext'
 
 export default function SmoothScroll({ children }) {
+  const { animationsEnabled } = useAnimations()
+
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !animationsEnabled) return
 
     const lenis = new Lenis({
       duration: 1.1,
@@ -11,17 +14,18 @@ export default function SmoothScroll({ children }) {
       smoothWheel: true,
     })
 
+    let frameId = 0
     function raf(time) {
       lenis.raf(time)
-      requestAnimationFrame(raf)
+      frameId = requestAnimationFrame(raf)
     }
-    const id = requestAnimationFrame(raf)
+    frameId = requestAnimationFrame(raf)
 
     return () => {
-      cancelAnimationFrame(id)
+      cancelAnimationFrame(frameId)
       lenis.destroy()
     }
-  }, [])
+  }, [animationsEnabled])
 
   return children
 }

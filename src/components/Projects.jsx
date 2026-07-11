@@ -1,152 +1,119 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { GH_URL, GH_USER, LANG_COLORS, totalStars } from '../lib/github'
-import RevealText from './RevealText'
+import SplitReveal from './SplitReveal'
 import Counter from './Counter'
-import Tilt from './Tilt'
+import SectionNum from './SectionNum'
 
 function StarIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.401 8.168L12 18.896l-7.335 3.869 1.401-8.168L.132 9.21l8.2-1.192z" />
     </svg>
   )
 }
 
 function prettyName(name) {
-  return name.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+  return name.replace(/[-_]/g, ' ')
 }
 
-function RepoCard({ repo, index, inView }) {
+function RepoRow({ repo, index, inView }) {
   const color = LANG_COLORS[repo.language] || 'var(--accent)'
   const demo = repo.homepage && repo.homepage.startsWith('http') ? repo.homepage : null
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
+    <motion.a
+      href={demo || repo.html_url}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-cursor={demo ? 'Demo' : 'Code'}
+      className="proj-row"
+      initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.55, delay: index * 0.08 }}
+      transition={{ duration: 0.5, delay: 0.2 + index * 0.06 }}
     >
-      <Tilt max={6} scale={1.015}>
-        <div
-          data-cursor="View"
-          style={{
-            display: 'flex', flexDirection: 'column',
-            padding: '1.6rem 1.8rem', background: 'var(--card)',
-            border: '1px solid var(--border)', borderRadius: 'var(--radius)',
-            position: 'relative', height: '100%',
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--text-dim)">
-              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-            </svg>
-            {repo.stargazers_count > 0 && (
-              <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                <span style={{ color: '#fbbf24' }}><StarIcon /></span>{repo.stargazers_count}
-              </span>
-            )}
-          </div>
+      <span className="proj-muted" style={{ fontFamily: 'var(--mono)', fontSize: '0.75rem', color: 'var(--text-dim)', letterSpacing: '0.1em' }}>
+        {String(index + 1).padStart(2, '0')}
+      </span>
 
-          <h3 style={{ fontFamily: 'var(--display)', fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.6rem', letterSpacing: '-0.02em' }}>
-            {prettyName(repo.name)}
-          </h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: '1.5rem', flexGrow: 1 }}>
-            {repo.description || 'No description provided.'}
-          </p>
+      <span style={{ minWidth: 0 }}>
+        <span className="mega" style={{ display: 'block', fontSize: 'clamp(1.5rem, 4.5vw, 3rem)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {prettyName(repo.name)}
+        </span>
+        <span className="proj-muted" style={{ display: 'block', fontSize: '0.83rem', color: 'var(--text-muted)', marginTop: '0.35rem', maxWidth: '620px', lineHeight: 1.55 }}>
+          {repo.description || 'No description provided.'}
+        </span>
+      </span>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-              {repo.language && <span style={{ width: 10, height: 10, borderRadius: '50%', background: color }} />}
-              {repo.language || 'Code'}
-            </span>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              {demo && (
-                <a href={demo} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--accent)' }}>
-                  Demo
-                </a>
-              )}
-              <a href={repo.html_url} target="_blank" rel="noopener noreferrer"
-                style={{ fontSize: '0.78rem', fontWeight: 600, color: '#fff', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                Code
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </Tilt>
-    </motion.div>
+      <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.75rem, 2vw, 1.75rem)', flexShrink: 0 }}>
+        {repo.stargazers_count > 0 && (
+          <span className="proj-muted proj-stars" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.75rem', fontFamily: 'var(--mono)', color: 'var(--text-muted)' }}>
+            <StarIcon />{repo.stargazers_count}
+          </span>
+        )}
+        <span className="proj-muted proj-lang" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.72rem', fontFamily: 'var(--mono)', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0 }} />
+          {repo.language || 'Code'}
+        </span>
+        <svg className="proj-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M7 17L17 7M17 7H7M17 7V17" />
+        </svg>
+      </span>
+    </motion.a>
   )
 }
 
 function Stat({ value, label, inView }) {
   return (
-    <div style={{ flex: '1 1 120px', textAlign: 'center', padding: '1.25rem 0.5rem' }}>
-      <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(1.6rem, 4vw, 2.3rem)', fontWeight: 700, color: 'var(--accent)' }}>
+    <div style={{ flex: '1 1 120px', padding: 'clamp(1.1rem, 2.5vw, 1.75rem) clamp(1rem, 2.5vw, 2rem)', borderRight: '1px solid var(--border)' }} className="gh-stat-cell">
+      <div className="mega" style={{ fontSize: 'clamp(1.7rem, 4vw, 2.6rem)', color: 'var(--accent)' }}>
         <Counter value={value} inView={inView} />
       </div>
-      <div style={{ fontSize: '0.72rem', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', marginTop: '0.25rem' }}>{label}</div>
+      <div style={{ fontSize: '0.62rem', letterSpacing: '0.18em', color: 'var(--text-muted)', textTransform: 'uppercase', marginTop: '0.3rem', fontFamily: 'var(--mono)' }}>{label}</div>
     </div>
   )
 }
 
 export default function Projects({ profile, repos, live }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const inView = useInView(ref, { once: true, amount: 0.15 })
   const [showAll, setShowAll] = useState(false)
 
   const visible = showAll ? repos : repos.slice(0, 6)
   const stars = totalStars(repos)
 
   return (
-    <section id="projects" ref={ref} style={{ padding: 'clamp(5rem, 10vw, 10rem) clamp(1.5rem, 6vw, 8rem)', position: 'relative', overflow: 'hidden' }}>
-      <span
-        aria-hidden="true"
-        style={{
-          position: 'absolute', top: '-2rem', right: 'clamp(1rem, 4vw, 4rem)',
-          fontFamily: 'var(--display)', fontSize: 'clamp(6rem, 16vw, 13rem)', fontWeight: 700,
-          color: 'transparent', WebkitTextStroke: '1px rgba(255,255,255,0.05)', lineHeight: 1, zIndex: 0,
-        }}
-      >
-        02
-      </span>
-
-      <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-          <span style={{ display: 'inline-block', width: '28px', height: '1px', background: 'var(--accent)' }} />
-          <motion.p
-            initial={{ opacity: 0, x: -16 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase' }}
-          >
-            Open Source
-          </motion.p>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-          <h2 style={{ fontFamily: 'var(--display)', fontSize: 'clamp(2.2rem, 5.5vw, 3.5rem)', fontWeight: 700, letterSpacing: '-0.03em' }}>
-            <RevealText text="Built on GitHub" inView={inView} delay={0.05} />
-          </h2>
+    <section id="projects" ref={ref} className="cv-auto" style={{ padding: 'clamp(5rem, 10vw, 10rem) clamp(1.25rem, 5vw, 6rem)', position: 'relative', overflow: 'hidden' }}>
+      <SectionNum n="03" />
+      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
+          <p className="eyebrow">03 / The work</p>
           {live && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.12em', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)', background: 'rgba(34,197,94,0.08)', borderRadius: 100, padding: '0.2rem 0.7rem' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.15em', fontFamily: 'var(--mono)', color: '#22c55e' }}>
               <motion.span animate={{ opacity: [1, 0.2, 1] }} transition={{ repeat: Infinity, duration: 1.3 }} style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e' }} />
-              LIVE
+              LIVE FROM GITHUB
             </span>
           )}
         </div>
+
+        <h2 className="mega" style={{ fontSize: 'clamp(3rem, 10vw, 8rem)', marginBottom: '1rem' }}>
+          <SplitReveal text="SELECTED" inView={inView} delay={0.05} />
+          <SplitReveal text="WORK" inView={inView} delay={0.18} charStyle={{ color: 'var(--accent)' }} />
+        </h2>
         <motion.p
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.2 }}
-          style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginBottom: '2.5rem' }}
+          style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '3rem', maxWidth: '520px' }}
         >
-          Pulled live from <a href={GH_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>@{GH_USER}</a> — spanning embedded systems, computer vision & AI.
+          Pulled live from <a href={GH_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', fontWeight: 600 }}>@{GH_USER}</a> — embedded systems, computer vision &amp; AI that survive contact with reality.
         </motion.p>
 
+        {/* GitHub stats band */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.25 }}
-          style={{ display: 'flex', flexWrap: 'wrap', background: 'var(--bg-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', marginBottom: '2.5rem' }}
+          style={{ display: 'flex', flexWrap: 'wrap', border: '1px solid var(--border)', marginBottom: '3.5rem' }}
         >
           <Stat value={profile.public_repos} label="Repositories" inView={inView} />
           <Stat value={stars} label="Stars Earned" inView={inView} />
@@ -154,22 +121,27 @@ export default function Projects({ profile, repos, live }) {
           <Stat value={new Date().getFullYear() - new Date(profile.created_at).getFullYear()} label="Years on GitHub" inView={inView} />
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
+        {/* Project index */}
+        <div style={{ borderTop: '1px solid var(--border)' }}>
           {visible.map((repo, i) => (
-            <RepoCard key={repo.name} repo={repo} index={i} inView={inView} />
+            <RepoRow key={repo.name} repo={repo} index={i} inView={inView} />
           ))}
         </div>
 
         {repos.length > 6 && (
-          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+          <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
             <button
-              data-cursor="Toggle"
+              data-cursor="More"
               onClick={() => setShowAll((v) => !v)}
-              style={{ padding: '0.7rem 1.8rem', border: '1px solid var(--border)', borderRadius: 100, fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', transition: 'all 0.25s' }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'; e.currentTarget.style.color = '#fff' }}
+              style={{
+                padding: '0.85rem 2.2rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)',
+                fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
+                color: 'var(--text-muted)', transition: 'all 0.25s',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)' }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-muted)' }}
             >
-              {showAll ? 'Show less' : `Show all ${repos.length} projects`}
+              {showAll ? 'Show less' : `All ${repos.length} projects`}
             </button>
           </div>
         )}
@@ -178,14 +150,14 @@ export default function Projects({ profile, repos, live }) {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          style={{ marginTop: '4rem' }}
+          style={{ marginTop: '4.5rem' }}
         >
-          <h3 style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '1.25rem', textAlign: 'center' }}>
-            Contribution Activity
+          <h3 className="eyebrow" style={{ color: 'var(--text-dim)', marginBottom: '1.25rem' }}>
+            Contribution activity
           </h3>
-          <div style={{ background: 'var(--bg-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 'clamp(1rem, 3vw, 2rem)', overflowX: 'auto' }}>
+          <div style={{ border: '1px solid var(--border)', padding: 'clamp(1rem, 3vw, 2rem)', overflowX: 'auto' }}>
             <img
-              src={`https://ghchart.rshah.org/3B82F6/${GH_USER}`}
+              src={`https://ghchart.rshah.org/2e6bff/${GH_USER}`}
               alt={`${GH_USER}'s GitHub contribution graph`}
               style={{ width: '100%', minWidth: 600, display: 'block' }}
               loading="lazy"
@@ -194,6 +166,14 @@ export default function Projects({ profile, repos, live }) {
           </div>
         </motion.div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .proj-row { grid-template-columns: 2rem minmax(0,1fr) auto; }
+          .proj-row .proj-lang, .proj-row .proj-stars { display: none !important; }
+          .gh-stat-cell:nth-child(even) { border-right: none !important; }
+        }
+      `}</style>
     </section>
   )
 }

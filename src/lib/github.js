@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 export const GH_USER = 'kkjjkamal123'
-export const GH_URL = `https://github.com/${GH_USER}`
+export const GH_URL = `https://github.com/kkjjkamal123`
 
 // GitHub language → brand color
 export const LANG_COLORS = {
@@ -66,12 +66,12 @@ export const FALLBACK_REPOS = [
     fork: false,
   },
   {
-    name: 'Lipo_Charger',
-    description: 'BMS and circuit designs for a base station.',
-    language: 'KiCad',
+    name: 'Custom Rocket Models with Sim',
+    description: 'A 3D printed model rocket with Simulations & Benchmarks',
+    language: 'Python',
     stargazers_count: 0,
     forks_count: 0,
-    html_url: `${GH_URL}/Lipo_Charger`,
+    html_url: `https://github.com/kkjjkamal123/Model-Rocket-V1`,
     homepage: '',
     updated_at: '2026-03-03T05:52:39Z',
     fork: false,
@@ -128,11 +128,11 @@ export function useGitHub() {
     async function load() {
       try {
         const [p, r] = await Promise.all([
-          fetch(`https://api.github.com/users/${GH_USER}`).then((res) => {
+          fetch(`https://api.github.com/users/kkjjkamal123`).then((res) => {
             if (!res.ok) throw new Error('profile')
             return res.json()
           }),
-          fetch(`https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=100`).then((res) => {
+          fetch(`https://api.github.com/users/kkjjkamal123/repos?sort=updated&per_page=100`).then((res) => {
             if (!res.ok) throw new Error('repos')
             return res.json()
           }),

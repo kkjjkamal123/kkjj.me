@@ -1,7 +1,8 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import Marquee from './Marquee'
-import RevealText from './RevealText'
+import SplitReveal from './SplitReveal'
+import SectionNum from './SectionNum'
 
 const categories = [
   {
@@ -37,34 +38,31 @@ function SkillRow({ cat, index, inView }) {
         gridTemplateColumns: '220px 1fr',
         alignItems: 'center',
         gap: '1.5rem',
-        padding: '1.5rem 0',
+        padding: '1.6rem 0',
         borderBottom: '1px solid var(--border)',
       }}
       className="skill-row"
     >
       <h3 style={{
-        fontSize: '0.78rem',
-        fontWeight: 700,
-        letterSpacing: '0.12em',
+        fontFamily: 'var(--mono)',
+        fontSize: '0.68rem',
+        fontWeight: 600,
+        letterSpacing: '0.18em',
         textTransform: 'uppercase',
         color: 'var(--text-dim)',
       }}>
-        {String(index + 1).padStart(2, '0')} — {cat.label}
+        <span style={{ color: 'var(--accent)' }}>{String(index + 1).padStart(2, '0')}</span> — {cat.label}
       </h3>
       <Marquee duration={cat.skills.length * 4} direction={cat.dir}>
         {cat.skills.map((skill) => (
           <span
             key={skill}
-            data-cursor="Skill"
+            data-cursor="loading"
+            className="mega"
             style={{
-              padding: '0.55rem 1.3rem',
-              border: '1px solid var(--border)',
-              borderRadius: 100,
-              fontSize: '0.95rem',
-              fontWeight: 500,
-              color: '#ddd',
+              fontSize: 'clamp(1.4rem, 3vw, 2.2rem)',
+              color: 'var(--text-muted)',
               whiteSpace: 'nowrap',
-              fontFamily: 'var(--display)',
             }}
           >
             {skill}
@@ -77,49 +75,34 @@ function SkillRow({ cat, index, inView }) {
 
 export default function Skills() {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const inView = useInView(ref, { once: true, amount: 0.2 })
 
   return (
-    <section id="skills" ref={ref} style={{
-      padding: 'clamp(5rem, 10vw, 10rem) clamp(1.5rem, 6vw, 8rem)',
+    <section id="skills" ref={ref} className="cv-auto" style={{
+      padding: 'clamp(5rem, 10vw, 10rem) clamp(1.25rem, 5vw, 6rem)',
       background: 'var(--bg-2)',
       position: 'relative',
       overflow: 'hidden',
     }}>
+      <SectionNum n="04" />
       <div style={{
         position: 'absolute',
         bottom: '-20%',
         left: '-10%',
         width: '50vw',
         height: '50vw',
-        background: 'radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 65%)',
+        background: 'radial-gradient(circle, var(--accent-dim) 0%, transparent 65%)',
         pointerEvents: 'none',
       }} />
 
-      <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-          <span style={{ display: 'inline-block', width: '28px', height: '1px', background: 'var(--accent)' }} />
-          <motion.p
-            initial={{ opacity: 0, x: -16 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase' }}
-          >
-            Skills
-          </motion.p>
-        </div>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
+        <p className="eyebrow" style={{ marginBottom: '1rem' }}>04 / The garage</p>
 
-        <h2 style={{
-          fontFamily: 'var(--display)',
-          fontSize: 'clamp(2.2rem, 5.5vw, 3.5rem)',
-          fontWeight: 700,
-          letterSpacing: '-0.03em',
-          marginBottom: '3rem',
-        }}>
-          <RevealText text="My toolkit" inView={inView} delay={0.05} />
+        <h2 className="mega" style={{ fontSize: 'clamp(3rem, 10vw, 8rem)', marginBottom: '3rem' }}>
+          <SplitReveal text="TOOLKIT" inView={inView} delay={0.05} />
         </h2>
 
-        <div>
+        <div style={{ borderTop: '1px solid var(--border)' }}>
           {categories.map((cat, i) => (
             <SkillRow key={cat.label} cat={cat} index={i} inView={inView} />
           ))}

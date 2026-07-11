@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Magnetic from './Magnetic'
+import ThemeToggle from './ThemeToggle'
+import AnimationToggle from './AnimationToggle'
 
 const links = [
   { label: 'Rocket', href: '#featured' },
   { label: 'About', href: '#about' },
+  { label: 'Log', href: '#trajectory' },
   { label: 'Projects', href: '#projects' },
   { label: 'Skills', href: '#skills' },
   { label: 'Contact', href: '#contact' },
@@ -17,7 +20,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -67,7 +70,7 @@ export default function Navbar() {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '0 0.6rem 0 1.4rem',
-            background: scrolled ? 'rgba(10,10,12,0.75)' : 'transparent',
+            background: scrolled ? 'var(--nav-bg)' : 'transparent',
             backdropFilter: scrolled ? 'blur(20px)' : 'none',
             border: scrolled ? '1px solid var(--border)' : '1px solid transparent',
             borderRadius: scrolled ? 100 : 0,
@@ -97,7 +100,7 @@ export default function Navbar() {
                   padding: '0.5rem 0.9rem',
                   fontSize: '0.82rem',
                   fontWeight: 500,
-                  color: active === l.href ? '#fff' : 'var(--text-muted)',
+                  color: active === l.href ? 'var(--text)' : 'var(--text-muted)',
                   letterSpacing: '0.02em',
                   transition: 'color 0.25s',
                 }}
@@ -106,12 +109,14 @@ export default function Navbar() {
                   <motion.span
                     layoutId="nav-pill"
                     transition={{ type: 'spring', damping: 22, stiffness: 260 }}
-                    style={{ position: 'absolute', inset: 0, borderRadius: 100, background: 'rgba(255,255,255,0.06)', zIndex: -1 }}
+                    style={{ position: 'absolute', inset: 0, borderRadius: 100, background: 'var(--surface-glass)', zIndex: -1 }}
                   />
                 )}
                 {l.label}
               </button>
             ))}
+            <ThemeToggle />
+            <AnimationToggle />
             <Magnetic range={50} strength={0.3} style={{ marginLeft: '0.5rem' }}>
               <a
                 href="https://github.com/kkjjkamal123"
@@ -143,7 +148,7 @@ export default function Navbar() {
             {[0, 1, 2].map((i) => (
               <span key={i} style={{
                 display: 'block', width: '22px', height: '2px',
-                background: menuOpen && i === 1 ? 'transparent' : '#fff',
+                background: menuOpen && i === 1 ? 'transparent' : 'var(--text)',
                 transition: 'all 0.3s',
                 transform: menuOpen ? (i === 0 ? 'rotate(45deg) translate(5px,5px)' : i === 2 ? 'rotate(-45deg) translate(5px,-5px)' : '') : '',
               }} />
@@ -166,7 +171,7 @@ export default function Navbar() {
               left: '1.25rem',
               right: '1.25rem',
               zIndex: 99,
-              background: 'rgba(10,10,12,0.97)',
+              background: 'var(--menu-bg)',
               backdropFilter: 'blur(20px)',
               border: '1px solid var(--border)',
               borderRadius: 20,
@@ -180,7 +185,7 @@ export default function Navbar() {
               <button
                 key={l.href}
                 onClick={() => handleLink(l.href)}
-                style={{ fontSize: '1.1rem', fontWeight: 500, color: '#fff', textAlign: 'left' }}
+                style={{ fontSize: '1.1rem', fontWeight: 500, color: 'var(--text)', textAlign: 'left' }}
               >
                 {l.label}
               </button>

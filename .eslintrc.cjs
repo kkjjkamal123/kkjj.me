@@ -14,7 +14,7 @@ module.exports = {
   rules: {
     'react-refresh/only-export-components': [
       'warn',
-      { allowConstantExport: true },
+      { allowConstantExport: true, allowExportNames: ['useAnimations'] },
     ],
     // App code (not a typed library) — inline styles & GitHub API shapes make
     // prop-types validation noise rather than signal.

@@ -1,9 +1,7 @@
 import { useRef } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 
-// Wrap a button/link/icon — it pulls toward the cursor within `range` px,
-// then snaps back on leave. Classic award-site micro-interaction.
-export default function Magnetic({ children, range = 60, strength = 0.4, as = 'div', style, ...rest }) {
+export default function Magnetic({ children, range = 60, strength = 0.4, as = 'div', style, 'data-cursor': dataCursor, ...rest }) {
   const ref = useRef(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -36,14 +34,19 @@ export default function Magnetic({ children, range = 60, strength = 0.4, as = 'd
   const Comp = motion[as] || motion.div
 
   return (
-    <Comp
+    <div
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      style={{ x: sx, y: sy, display: 'inline-block', ...style }}
-      {...rest}
+      style={{ display: 'inline-block' }}
+      data-cursor={dataCursor}
     >
-      {children}
-    </Comp>
+      <Comp
+        style={{ x: sx, y: sy, display: 'inline-block', ...style }}
+        {...rest}
+      >
+        {children}
+      </Comp>
+    </div>
   )
 }

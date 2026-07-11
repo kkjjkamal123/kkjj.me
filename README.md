@@ -1,8 +1,8 @@
 # kkjj.me
 
-A fast, dark, single-page developer portfolio for Kamalesh VS, inspired by [landonorris.com](https://www.landonorris.com).
-Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub integration** and an animated
-**rocket project spotlight** (building · aerodynamics · telemetry).
+A fast, dark developer portfolio for Kamalesh VS, inspired by [landonorris.com](https://www.landonorris.com).
+Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub integration**, an animated
+**rocket project spotlight**, and a **landonorris-style editorial design** with giant Anton headings and electric cobalt blue accents.
 
 > Live preview locally: `npm run dev` → http://localhost:5173
  For the site check out https://kkjj.me
@@ -16,15 +16,18 @@ Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub int
 - **Buttery smooth scroll** powered by [Lenis](https://github.com/darkroomengineering/lenis).
 - **Preloader** with a live percentage counter that wipes away into the page on first load.
 - **Kinetic typography** — per-word mask reveals (`RevealText`) and a hover scramble effect (`ScrambleText`)
-  on key headlines, set in **Clash Display**.
+  on key headlines, set in **Anton** (giant condensed uppercase) with electric cobalt accents.
 - **Magnetic buttons & links** that pull toward the cursor within range, and **3D tilt** on project/telemetry
   cards that tracks pointer position.
 - **Marquee tickers** for the hero role strip, the skills toolkit (alternating directions per row), and the footer CTA.
 - **Film-grain overlay** + a top scroll-progress bar + a scroll-spy nav pill that slides between active sections.
-- **Editorial layout** — oversized faded section numerals, asymmetric grids, and a watermark headline instead of
-  a centered "hero card" template.
-- **Animated rocket spotlight** — SVG rocket with a blue-plasma flame, a twinkling starfield, focus-area
+- **Centered mission-control hero** — blueprint grid background + HUD corner brackets + parallax "BUILD" outlined watermark easter egg (drifts with cursor), with EST. 2006 year tag.
+- **TRAJECTORY flight-log** — an interactive timeline of milestones from 2006 to NOW, with year, title, and detail per entry.
+- **Editorial layout** — oversized faded section numerals, asymmetric grids, watermark headlines, and an
+  indexed project table (numbered rows with Anton titles, language tags, electric cobalt hover fills).
+- **Animated rocket spotlight** — SVG rocket with electric cobalt flame, a twinkling starfield, focus-area
   cards, and a looping **telemetry preview panel** (clearly tagged `PREVIEW` — illustrative, not real flight data).
+- **F1-style data strip** — hero metadata row displaying key stats (FPS, mAP50, disciplines, year) in monospace, with mission-control HUD styling.
 - **Live GitHub integration** — pulls your real profile + repos from the GitHub API on load, with your data
   baked in as a fallback so it never breaks or rate-limits. Shows a stats strip with count-up numbers,
   language-coloured repo cards, star counts, a "LIVE" badge, and your contribution graph.
@@ -42,7 +45,7 @@ Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub int
 | Build tool    | Vite 8                                            |
 | Animation     | Framer Motion                                     |
 | Smooth scroll | Lenis                                             |
-| Fonts         | Clash Display + General Sans (Fontshare), fallback Space Grotesk + Inter (Google) |
+| Fonts         | Anton (Google Fonts, giant headings), General Sans (Fontshare, body), system monospace (data/labels) |
 | Data          | GitHub REST API (live, no key)                    |
 | Contrib graph | ghchart.rshah.org                                 |
 
@@ -108,11 +111,17 @@ kkjj-me/
 |------|-------|
 | **Rocket name, tagline, focus areas, demo/repo links** | `PROJECT` object at the top of `src/components/FeaturedRocket.jsx` |
 | **GitHub username** | `GH_USER` in `src/lib/github.js` |
-| **Accent colour** | `--accent` in `src/index.css` (plus a few literal `#3B82F6` values in the rocket SVG and the contribution-graph URL in `Projects.jsx`) |
+| **Accent colour** | Electric cobalt blue (#2e6bff family) in `src/index.css` `:root` and `[data-theme="light"]` blocks; background is deep space-blue black (#06080f) with light neutral (#f3f5fa) in light theme |
 | **Bio / About copy** | `src/components/About.jsx` |
 | **Skills** | `categories` array in `src/components/Skills.jsx` |
 | **Contact links** | `socials` array in `src/components/Contact.jsx` |
 | **Page title / meta** | `index.html` |
+
+---
+
+## ✏️ Content Editing
+
+For a complete guide on editing all portfolio content (hero, timeline, skills, contact, etc.) with exact const names and locations, see **[EDITING.md](./EDITING.md)**.
 
 ---
 

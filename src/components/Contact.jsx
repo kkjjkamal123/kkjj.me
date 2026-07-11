@@ -1,8 +1,8 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import RevealText from './RevealText'
-import ScrambleText from './ScrambleText'
 import Magnetic from './Magnetic'
+import SectionNum from './SectionNum'
 
 const socials = [
   {
@@ -28,7 +28,7 @@ const socials = [
   {
     name: 'LinkedIn',
     handle: 'VS Kamalesh',
-    url: 'https://linkedin.com',
+    url: 'https://www.linkedin.com/in/kkjjkamal/',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -40,43 +40,17 @@ const socials = [
 export default function Contact() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+  const emailSocial = socials.find(s => s.name === 'Email')
 
   return (
-    <section id="contact" ref={ref} style={{ padding: 'clamp(5rem, 10vw, 10rem) clamp(1.5rem, 6vw, 8rem)', position: 'relative', overflow: 'hidden' }}>
-      <span
-        aria-hidden="true"
-        style={{
-          position: 'absolute', top: '-2rem', left: 'clamp(1rem, 4vw, 4rem)',
-          fontFamily: 'var(--display)', fontSize: 'clamp(6rem, 16vw, 13rem)', fontWeight: 700,
-          color: 'transparent', WebkitTextStroke: '1px rgba(255,255,255,0.05)', lineHeight: 1, zIndex: 0,
-        }}
-      >
-        03
-      </span>
+    <section id="contact" ref={ref} className="cv-auto" style={{ padding: 'clamp(5rem, 10vw, 10rem) clamp(1.25rem, 5vw, 6rem)', position: 'relative', overflow: 'hidden' }}>
+      <SectionNum n="05" />
+      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <p className="eyebrow" style={{ marginBottom: '1rem' }}>05 / Radio check</p>
 
-      <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-          <span style={{ display: 'inline-block', width: '28px', height: '1px', background: 'var(--accent)' }} />
-          <motion.p
-            initial={{ opacity: 0, x: -16 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            style={{ fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase' }}
-          >
-            Contact
-          </motion.p>
-        </div>
-
-        <h2 style={{
-          fontFamily: 'var(--display)',
-          fontSize: 'clamp(2.6rem, 8vw, 5.5rem)',
-          fontWeight: 700,
-          lineHeight: 0.98,
-          letterSpacing: '-0.03em',
-          marginBottom: '3rem',
-        }}>
-          <RevealText text="Let's build something" inView={inView} delay={0.1} />
-          <RevealText text="together." inView={inView} delay={0.25} wordStyle={{ color: 'var(--accent)' }} />
+        <h2 className="mega" style={{ fontSize: 'clamp(3.2rem, 12vw, 11rem)', marginBottom: 'clamp(2.5rem, 6vw, 4rem)' }}>
+          <RevealText text="LET'S BUILD" inView={inView} delay={0.1} />
+          <RevealText text="TOGETHER" inView={inView} delay={0.25} wordStyle={{ color: 'var(--accent)' }} />
         </h2>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(2rem, 6vw, 5rem)', alignItems: 'start' }} className="contact-grid">
@@ -96,24 +70,25 @@ export default function Contact() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              <Magnetic range={80} strength={0.3}>
+              <Magnetic range={80} strength={0.3} data-cursor="Email">
                 <a
-                  href="mailto:kkjjwork123@gmail.com"
-                  data-cursor="Email"
+                  href={emailSocial.url}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '0.6rem',
-                    padding: '1.1rem 2.4rem',
-                    background: 'var(--accent)',
-                    color: '#fff',
-                    fontWeight: 600,
-                    fontSize: '1rem',
-                    borderRadius: 100,
-                    letterSpacing: '0.02em',
+                    padding: '1.1rem 2.6rem',
+                    background: 'var(--accent-fill)',
+                    color: 'var(--accent-ink)',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    borderRadius: 'var(--radius)',
+                    whiteSpace: 'nowrap',
                   }}
                 >
-                  <ScrambleText text="Send me an email" />
+                  Send me an email
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
                 </a>
               </Magnetic>
@@ -125,11 +100,12 @@ export default function Contact() {
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
               transition={{ delay: 0.3 }}
-              style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '1.5rem' }}
+              className="eyebrow"
+              style={{ color: 'var(--text-dim)', marginBottom: '1.5rem' }}
             >
               Find me online
             </motion.h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               {socials.map((s, i) => (
                 <motion.a
                   key={s.name}
@@ -145,18 +121,16 @@ export default function Contact() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '1rem',
-                    padding: '1.1rem 1.5rem',
-                    background: 'var(--card)',
-                    border: '1px solid var(--border)',
-                    borderRadius: 'var(--radius)',
+                    padding: '1.2rem 0.5rem',
+                    borderBottom: '1px solid var(--border)',
                   }}
                 >
                   <span style={{ color: 'var(--accent)' }}>{s.icon}</span>
                   <div>
-                    <div style={{ fontSize: '0.82rem', fontWeight: 700, letterSpacing: '0.05em', color: '#fff', marginBottom: '0.1rem' }}>{s.name}</div>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{s.handle}</div>
+                    <div className="mega" style={{ fontSize: '1.1rem', marginBottom: '0.1rem' }}>{s.name}</div>
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontFamily: 'var(--mono)' }}>{s.handle}</div>
                   </div>
-                  <svg style={{ marginLeft: 'auto', opacity: 0.3 }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg style={{ marginLeft: 'auto', opacity: 0.35 }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M7 17L17 7M17 7H7M17 7V17" />
                   </svg>
                 </motion.a>
