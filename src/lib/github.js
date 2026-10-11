@@ -29,13 +29,23 @@ export const FALLBACK_PROFILE = {
   name: 'Kamalesh VS',
   avatar_url: 'https://avatars.githubusercontent.com/u/76260512?v=4',
   html_url: GH_URL,
-  public_repos: 29,
+  public_repos: 30,
   followers: 24,
   following: 21,
   created_at: '2020-12-19T17:19:37Z',
 }
 
 export const FALLBACK_REPOS = [
+  {
+    "name": "Agentic-OS",
+    "description": "A macOS desktop OS for AI agents: describe a goal and Claude, GPT, Gemini, Ollama and CLI agents plan, build in parallel, cross-review, test and ship it. Electron + React, Obsidian Brain sync.",
+    "language": "TypeScript",
+    "stargazers_count": 0,
+    "html_url": "https://github.com/kkjjkamal123/Agentic-OS",
+    "homepage": "",
+    "updated_at": "2026-10-12T03:10:00Z",
+    "fork": false
+  },
   {
     "name": "Vox",
     "description": "Hands-free, on-device voice control for macOS: \"Hey Vox\" wake word, streaming commands, Spotify/YouTube/Music, messages, timers, and an on-device LLM fallback. Swift, macOS 26+.",
