@@ -1,8 +1,8 @@
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import RevealText from './RevealText'
 import Magnetic from './Magnetic'
-import SectionNum from './SectionNum'
+import Orbs from './Orbs'
 
 const socials = [
   {
@@ -44,28 +44,33 @@ export default function Contact() {
 
   return (
     <section id="contact" ref={ref} className="cv-auto" style={{ padding: 'clamp(5rem, 10vw, 10rem) clamp(1.25rem, 5vw, 6rem)', position: 'relative', overflow: 'hidden' }}>
-      <SectionNum n="05" />
+      <Orbs
+        items={[
+          { top: '-5%', left: '10%', size: '44vw', color: 'var(--orb-1)', speed: 0.18 },
+          { bottom: '-15%', right: '-5%', size: '36vw', color: 'var(--orb-2)', speed: 0.26 },
+        ]}
+      />
       <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <p className="eyebrow" style={{ marginBottom: '1rem' }}>05 / Radio check</p>
+        <p className="eyebrow" style={{ marginBottom: '1rem' }}>Contact</p>
 
-        <h2 className="mega" style={{ fontSize: 'clamp(3.2rem, 12vw, 11rem)', marginBottom: 'clamp(2.5rem, 6vw, 4rem)' }}>
-          <RevealText text="LET'S BUILD" inView={inView} delay={0.1} />
-          <RevealText text="TOGETHER" inView={inView} delay={0.25} wordStyle={{ color: 'var(--accent)' }} />
+        <h2 className="mega" style={{ fontSize: 'clamp(3rem, 10vw, 8.5rem)', marginBottom: 'clamp(2.5rem, 6vw, 4rem)' }}>
+          <RevealText text="GET IN" inView={inView} delay={0.1} />
+          <RevealText text="TOUCH" inView={inView} delay={0.25} wordStyle={{ color: 'var(--accent)' }} />
         </h2>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(2rem, 6vw, 5rem)', alignItems: 'start' }} className="contact-grid">
           <div>
-            <motion.p
+            <m.p
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.4 }}
               style={{ fontSize: '1.05rem', color: 'var(--text-muted)', lineHeight: 1.75, maxWidth: '420px', marginBottom: '2.5rem' }}
             >
-              Whether you have a project in mind, want to collaborate or just want to say hi
-              — my inbox is always open.
-            </motion.p>
+              I&apos;m looking for internships in embedded systems, computer vision or aerospace.
+              Happy to talk about any of those, or about the rocket build — email gets to me fastest.
+            </m.p>
 
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.5 }}
@@ -73,30 +78,29 @@ export default function Contact() {
               <Magnetic range={80} strength={0.3} data-cursor="Email">
                 <a
                   href={emailSocial.url}
+                  className="btn-primary"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '0.6rem',
                     padding: '1.1rem 2.6rem',
-                    background: 'var(--accent-fill)',
-                    color: 'var(--accent-ink)',
                     fontWeight: 700,
                     fontSize: '0.85rem',
                     letterSpacing: '0.08em',
                     textTransform: 'uppercase',
-                    borderRadius: 'var(--radius)',
+                    borderRadius: 100,
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  Send me an email
+                  Email me
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
                 </a>
               </Magnetic>
-            </motion.div>
+            </m.div>
           </div>
 
           <div>
-            <motion.h3
+            <m.h3
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
               transition={{ delay: 0.3 }}
@@ -104,25 +108,27 @@ export default function Contact() {
               style={{ color: 'var(--text-dim)', marginBottom: '1.5rem' }}
             >
               Find me online
-            </motion.h3>
+            </m.h3>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {socials.map((s, i) => (
-                <motion.a
+                <m.a
                   key={s.name}
                   href={s.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...(s.url.startsWith('mailto:')
+                    ? {}
+                    : { target: '_blank', rel: 'noopener noreferrer' })}
                   data-cursor="Open"
                   initial={{ opacity: 0, x: 20 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
                   transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
                   whileHover={{ x: 6 }}
+                  className="glass glass-sm glass-hover"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '1rem',
-                    padding: '1.2rem 0.5rem',
-                    borderBottom: '1px solid var(--border)',
+                    padding: '1.1rem 1.25rem',
+                    marginBottom: '0.6rem',
                   }}
                 >
                   <span style={{ color: 'var(--accent)' }}>{s.icon}</span>
@@ -133,7 +139,7 @@ export default function Contact() {
                   <svg style={{ marginLeft: 'auto', opacity: 0.35 }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M7 17L17 7M17 7H7M17 7V17" />
                   </svg>
-                </motion.a>
+                </m.a>
               ))}
             </div>
           </div>

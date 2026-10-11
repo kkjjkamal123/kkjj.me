@@ -1,17 +1,19 @@
-import { useRef } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { useRef, useEffect } from 'react'
+import { m, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import RevealText from './RevealText'
-import ScrambleText from './ScrambleText'
 import Magnetic from './Magnetic'
 import Marquee from './Marquee'
+import Orbs from './Orbs'
+import { useParallax, usePauseOffscreen, scrollToId } from '../lib/scroll'
+import { useAnimations } from './AnimationContext'
 
 const ROLES = ['EMBEDDED SYSTEMS', 'COMPUTER VISION', 'ARTIFICIAL INTELLIGENCE', 'AEROSPACE', 'ROBOTICS']
 
 const DATA_STRIP = [
-  { value: '43.6', label: 'FPS · Edge CV on RPi 5' },
-  { value: '0.982', label: 'mAP50 · YOLOv8n-OBB' },
+  { value: 'ECE', label: 'Undergrad · Chennai, India' },
   { value: '05+', label: 'Disciplines · One builder' },
-  { value: '2020', label: 'Building since' },
+  { value: '2006', label: 'Taking things apart since' },
+  { value: '2020', label: 'First commit' },
 ]
 
 const BRACKETS = [
@@ -21,8 +23,19 @@ const BRACKETS = [
   { bottom: 0, right: 0, borderWidth: '0 1px 1px 0' },
 ]
 
-export default function Hero() {
+const GLOW_SIZE = 760
+
+// `ready` goes true when the preloader has finished wiping away. The
+// timed entrance below is held until then — otherwise the whole
+// choreography plays out behind an opaque curtain and the hero is
+// simply already there when the curtain lifts.
+export default function Hero({ ready = true }) {
   const sectionRef = useRef(null)
+  const rectRef = useRef(null)
+  const rafRef = useRef(0)
+  const { animationsEnabled } = useAnimations()
+
+  // Normalised 0–1 position, used for the watermark drift.
   const mx = useMotionValue(0.5)
   const my = useMotionValue(0.5)
   const glowX = useSpring(mx, { damping: 30, stiffness: 60 })
@@ -31,16 +44,60 @@ export default function Hero() {
   const parX = useTransform(glowX, [0, 1], [22, -22])
   const parY = useTransform(glowY, [0, 1], [14, -14])
 
+  // Pixel position for the glow. Animating a radial-gradient's `at`
+  // stop repaints the whole layer each frame; translating a fixed-size
+  // pre-painted layer stays on the compositor instead.
+  const px = useMotionValue(0)
+  const py = useMotionValue(0)
+  const spx = useSpring(px, { damping: 30, stiffness: 60 })
+  const spy = useSpring(py, { damping: 30, stiffness: 60 })
+  const glowTX = useTransform(spx, (v) => v - GLOW_SIZE / 2)
+  const glowTY = useTransform(spy, (v) => v - GLOW_SIZE / 2)
+
+  // Scroll parallax runs on a wrapper so it composes with the cursor
+  // drift above instead of fighting it for the same transform.
+  const watermarkScroll = useParallax(0.32, { enabled: animationsEnabled })
+  const gridScroll = useParallax(0.12, { enabled: animationsEnabled })
+  usePauseOffscreen(sectionRef)
+
+  // The rect is measured on pointer entry and on resize — never on
+  // scroll, which would cost a layout flush on every scrolled frame for
+  // an effect that only matters while the pointer is inside the hero.
+  const measure = () => {
+    if (sectionRef.current) rectRef.current = sectionRef.current.getBoundingClientRect()
+  }
+
+  useEffect(() => {
+    measure()
+    window.addEventListener('resize', measure, { passive: true })
+    return () => {
+      window.removeEventListener('resize', measure)
+      cancelAnimationFrame(rafRef.current)
+    }
+  }, [])
+
   const onMove = (e) => {
-    const rect = sectionRef.current.getBoundingClientRect()
-    mx.set((e.clientX - rect.left) / rect.width)
-    my.set((e.clientY - rect.top) / rect.height)
+    if (!animationsEnabled) return
+    const { clientX, clientY } = e
+    if (rafRef.current) return
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0
+      const rect = rectRef.current
+      if (!rect) return
+      const x = clientX - rect.left
+      const y = clientY - rect.top
+      mx.set(x / rect.width)
+      my.set(y / rect.height)
+      px.set(x)
+      py.set(y)
+    })
   }
 
   return (
     <section
       ref={sectionRef}
       id="hero"
+      onMouseEnter={measure}
       onMouseMove={onMove}
       style={{
         minHeight: '100svh',
@@ -51,30 +108,43 @@ export default function Hero() {
         paddingTop: '64px',
       }}
     >
-      <div className="hero-blueprint" aria-hidden="true" />
+      <Orbs
+        items={[
+          { top: '-8%', left: '-6%', size: '46vw', color: 'var(--orb-1)', speed: 0.14 },
+          { bottom: '-12%', right: '-8%', size: '40vw', color: 'var(--orb-2)', speed: 0.24 },
+        ]}
+      />
 
-      {/* Cursor-reactive glow */}
-      <motion.div
+      <div ref={gridScroll} className="hero-blueprint" aria-hidden="true" />
+
+      {/* Cursor-reactive glow — a pre-painted layer that only translates */}
+      <m.div
+        aria-hidden="true"
         style={{
           position: 'absolute',
-          inset: 0,
+          top: 0,
+          left: 0,
+          width: GLOW_SIZE,
+          height: GLOW_SIZE,
+          x: glowTX,
+          y: glowTY,
           pointerEvents: 'none',
-          background: useTransform(
-            [glowX, glowY],
-            ([gx, gy]) => `radial-gradient(640px circle at ${gx * 100}% ${gy * 100}%, var(--accent-glow), transparent 70%)`,
-          ),
+          zIndex: 0,
+          background: 'radial-gradient(circle closest-side, var(--accent-glow), transparent 100%)',
+          willChange: 'transform',
         }}
       />
 
       {/* Metadata row — in flow, so it can never sit on the name */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.9 }}
+        animate={ready ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.8, delay: 0.3 }}
         className="hero-meta-row"
         style={{
           display: 'flex',
           justifyContent: 'space-between',
+          alignItems: 'center',
           gap: '1rem',
           padding: '1rem clamp(1.25rem, 5vw, 6rem)',
           borderBottom: '1px solid var(--border)',
@@ -84,13 +154,30 @@ export default function Hero() {
           textTransform: 'uppercase',
           color: 'var(--text-dim)',
           position: 'relative',
-          zIndex: 1,
+          zIndex: 2,
         }}
       >
-        <span className="hero-meta-right">Portfolio / 2026</span>
-        <span style={{ color: 'var(--accent)' }}>● Available for collaboration</span>
-        <span className="hero-meta-right">IND · Earth · LEO-curious</span>
-      </motion.div>
+        <span className="hero-meta-right">Chennai, India</span>
+        <span
+          className="glass glass-sm"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '0.4rem 0.9rem',
+            borderRadius: 100,
+            color: 'var(--accent)',
+            boxShadow: 'var(--shadow-1)',
+          }}
+        >
+          <span
+            className="pulse-dot"
+            style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', flexShrink: 0 }}
+          />
+          Looking for internships
+        </span>
+        <span className="hero-meta-right">ECE undergrad</span>
+      </m.div>
 
       {/* Center stage */}
       <div
@@ -109,62 +196,53 @@ export default function Hero() {
         {/* HUD corner brackets */}
         <div aria-hidden="true" style={{ position: 'absolute', inset: 'clamp(1rem, 3vw, 2rem)', pointerEvents: 'none' }}>
           {BRACKETS.map((b, i) => (
-            <motion.span
+            <m.span
               key={i}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.55 }}
-              transition={{ delay: 1.2 + i * 0.08, duration: 0.5 }}
-              style={{ position: 'absolute', width: 22, height: 22, borderStyle: 'solid', borderColor: 'var(--text-dim)', ...b }}
+              animate={ready ? { opacity: 0.55 } : { opacity: 0 }}
+              transition={{ delay: 0.6 + i * 0.08, duration: 0.5 }}
+              style={{ position: 'absolute', width: 22, height: 22, borderStyle: 'solid', borderColor: 'var(--text-faint)', ...b }}
             />
           ))}
         </div>
 
         {/* Easter egg: outlined BUILD watermark, parallax-drifting behind the name */}
-        <motion.span
+        <div
+          ref={watermarkScroll}
           aria-hidden="true"
-          className="mega"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.6, delay: 0.6 }}
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            translateX: '-50%',
-            translateY: '-50%',
-            x: parX,
-            y: parY,
-            fontSize: 'clamp(8rem, 26vw, 22rem)',
-            color: 'transparent',
-            WebkitTextStroke: '1px var(--watermark-stroke)',
-            whiteSpace: 'nowrap',
-            pointerEvents: 'none',
-            userSelect: 'none',
-            zIndex: 0,
-          }}
+          style={{ position: 'absolute', top: '50%', left: '50%', translate: '-50% -50%', zIndex: 0, pointerEvents: 'none' }}
         >
-          BUILD
-        </motion.span>
+          <m.span
+            className="mega"
+            initial={{ opacity: 0 }}
+            animate={ready ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 1.6, delay: 0.1 }}
+            style={{
+              display: 'block',
+              x: parX,
+              y: parY,
+              fontSize: 'clamp(8rem, 26vw, 22rem)',
+              color: 'transparent',
+              WebkitTextStroke: '1px var(--watermark-stroke)',
+              whiteSpace: 'nowrap',
+              userSelect: 'none',
+            }}
+          >
+            BUILD
+          </m.span>
+        </div>
 
         <h1 className="mega" style={{ fontSize: 'clamp(3.4rem, 10vw, 8.5rem)', position: 'relative', zIndex: 1, width: 'fit-content', textAlign: 'left', margin: 0 }}>
-          <RevealText as="span" text="KAMALESH" delay={0.25} />
+          <RevealText as="span" text="KAMALESH" delay={0.05} inView={ready} />
           <span style={{ display: 'flex', alignItems: 'baseline', gap: '0.4em' }}>
-            <RevealText as="span" text="VS" delay={0.4} wordStyle={{ color: 'var(--accent)' }} />
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.05, duration: 0.6 }}
-              style={{ fontFamily: 'var(--mono)', fontSize: 'clamp(0.7rem, 1.4vw, 0.9rem)', letterSpacing: '0.3em', color: 'var(--text-dim)' }}
-            >
-              EST. 2006
-            </motion.span>
+            <RevealText as="span" text="VS" delay={0.18} inView={ready} wordStyle={{ color: 'var(--accent)' }} />
           </span>
         </h1>
 
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.75 }}
+          animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
           style={{
             fontSize: 'clamp(1rem, 2vw, 1.2rem)',
             color: 'var(--text-muted)',
@@ -175,77 +253,61 @@ export default function Hero() {
             zIndex: 1,
           }}
         >
-          I build things that <ScrambleText as="span" text="sense" style={{ color: 'var(--text)', fontWeight: 600 }} />,{' '}
-          <ScrambleText as="span" text="move" style={{ color: 'var(--text)', fontWeight: 600 }} /> and{' '}
-          <ScrambleText as="span" text="fly" style={{ color: 'var(--accent)', fontWeight: 600 }} /> — embedded systems,
-          computer vision &amp; AI, currently engineering a rocket from airframe to telemetry.
-        </motion.p>
+          I build things that have to work outside the lab: an on-device LLM runtime that generates tokens
+          <span style={{ color: 'var(--text)', fontWeight: 600 }}> 47% faster than Arm&apos;s own reference app</span>,
+          thermal management for a CubeSat, and a model rocket with the avionics that ride in it.
+        </m.p>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
+          animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: 0.6, delay: 0.42 }}
+          className="hero-ctas"
           style={{ display: 'flex', gap: '0.9rem', flexWrap: 'wrap', justifyContent: 'center', position: 'relative', zIndex: 1 }}
         >
           <Magnetic range={70} strength={0.35} data-cursor="View">
-            <button
-              onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
-              style={{
-                padding: '1rem 2.4rem',
-                background: 'var(--accent-fill)',
-                color: 'var(--accent-ink)',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                borderRadius: 'var(--radius)',
-              }}
-            >
+            <button onClick={() => scrollToId('#projects')} className="btn btn-primary">
               View the work
             </button>
           </Magnetic>
-          <Magnetic range={70} strength={0.35} data-cursor="Say hi">
-            <button
-              onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-              style={{
-                padding: '1rem 2.4rem',
-                background: 'transparent',
-                color: 'var(--text)',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                borderRadius: 'var(--radius)',
-                border: '1px solid var(--border)',
-              }}
+          <Magnetic range={70} strength={0.35} data-cursor="CV">
+            <a
+              href="/CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn glass glass-hover"
+              style={{ color: 'var(--accent)', borderColor: 'var(--accent)' }}
             >
+              Download CV
+            </a>
+          </Magnetic>
+          <Magnetic range={70} strength={0.35} data-cursor="Say hi">
+            <button onClick={() => scrollToId('#contact')} className="btn glass glass-hover" style={{ color: 'var(--text)' }}>
               Get in touch
             </button>
           </Magnetic>
-        </motion.div>
+        </m.div>
       </div>
 
-      {/* Data strip */}
-      <motion.div
+      {/* Data strip — glass tiles over the ambient field */}
+      <m.div
         initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 1 }}
+        animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+        transition={{ duration: 0.7, delay: 0.5 }}
         style={{
-          borderTop: '1px solid var(--border)',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+          gap: 'clamp(0.5rem, 1vw, 0.75rem)',
+          padding: '0 clamp(1.25rem, 5vw, 6rem) clamp(1rem, 2vw, 1.5rem)',
           position: 'relative',
           zIndex: 1,
         }}
       >
-        {DATA_STRIP.map((d, i) => (
+        {DATA_STRIP.map((d) => (
           <div
             key={d.label}
-            style={{
-              padding: 'clamp(1rem, 2.5vw, 1.6rem) clamp(1.25rem, 3vw, 2.5rem)',
-              borderRight: i < DATA_STRIP.length - 1 ? '1px solid var(--border)' : 'none',
-            }}
-            className="hero-stat-cell"
+            className="glass glass-sm glass-hover"
+            style={{ padding: 'clamp(1rem, 2.2vw, 1.4rem) clamp(1rem, 2vw, 1.5rem)' }}
           >
             <div className="mega" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.6rem)', color: 'var(--accent)' }}>
               {d.value}
@@ -255,31 +317,33 @@ export default function Hero() {
             </div>
           </div>
         ))}
-      </motion.div>
+      </m.div>
 
       {/* Marquee ticker */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.1, duration: 0.6 }}
+        animate={ready ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ delay: 0.58, duration: 0.6 }}
         style={{ borderTop: '1px solid var(--border)', padding: '0.9rem 0', position: 'relative', zIndex: 1 }}
       >
         <Marquee duration={24}>
           {ROLES.map((r) => (
-            <span key={r} className="mega" style={{ display: 'flex', alignItems: 'center', gap: '3rem', fontSize: 'clamp(1rem, 2vw, 1.5rem)', color: 'var(--text-dim)', whiteSpace: 'nowrap' }}>
+            <span key={r} className="mega" style={{ display: 'flex', alignItems: 'center', gap: '3rem', fontSize: 'clamp(1rem, 2vw, 1.5rem)', color: 'var(--text-faint)', whiteSpace: 'nowrap' }}>
               {r}
               <span style={{ color: 'var(--accent)', fontSize: '0.7em' }}>&#9670;</span>
             </span>
           ))}
         </Marquee>
-      </motion.div>
+      </m.div>
 
       <style>{`
         @media (max-width: 640px) {
           .hero-meta-right { display: none; }
-          #hero .hero-meta-row { justify-content: center; }
-          .hero-stat-cell { border-right: none !important; border-bottom: 1px solid var(--border); }
-          .hero-stat-cell:last-child { border-bottom: none; }
+          #hero .hero-meta-row { justify-content: center !important; }
+        }
+        @media (max-width: 520px) {
+          .hero-ctas { flex-direction: column; align-items: stretch; width: 100%; max-width: 340px; }
+          .hero-ctas > div, .hero-ctas > div > div, .hero-ctas .btn { width: 100%; }
         }
       `}</style>
     </section>

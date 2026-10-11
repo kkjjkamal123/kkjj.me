@@ -1,7 +1,8 @@
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import SplitReveal from './SplitReveal'
-import SectionNum from './SectionNum'
+import Orbs from './Orbs'
+import Tilt from './Tilt'
 
 // ── Edit this array to add/remove milestones — newest at the bottom ─────
 // Each entry: { year, title, detail }. Keep details to one or two lines.
@@ -27,9 +28,14 @@ const LOG = [
     detail: 'AI-powered semantic search over NCO-2015 occupation codes; a live bus-tracking interface.',
   },
   {
+    year: '2025',
+    title: 'Industry Experience',
+    detail: 'Maintenance Technician Intern at Chennai Rail Metro. Currently Thermal Engineer at ULOG3 doing R&D on CubeSat thermal management.',
+  },
+  {
     year: '2026',
-    title: 'Edge vision at speed',
-    detail: 'ARM Bharath Challenge — YOLOv8n-OBB INT8 on a Raspberry Pi 5: 43.6 FPS at mAP50 0.982.',
+    title: 'Beating the reference',
+    detail: 'ENTITY, an adaptive LLM runtime for Arm phones: 47% faster tokens than Arm’s own app on the same silicon, and the fix merged upstream into llama.cpp.',
   },
   {
     year: 'NOW',
@@ -40,7 +46,7 @@ const LOG = [
 
 function LogRow({ item, index, inView, last }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.55, delay: 0.25 + index * 0.12 }}
@@ -52,7 +58,7 @@ function LogRow({ item, index, inView, last }) {
         alignItems: 'start',
       }}
     >
-      <div className="mega" style={{ fontSize: 'clamp(1.6rem, 4vw, 2.6rem)', color: item.year === 'NOW' ? 'var(--accent)' : 'var(--text-dim)', lineHeight: 1.1, textAlign: 'right' }}>
+      <div className="mega" style={{ fontSize: 'clamp(1.6rem, 4vw, 2.6rem)', color: item.year === 'NOW' ? 'var(--accent)' : 'var(--text-faint)', lineHeight: 1.1, textAlign: 'right' }}>
         {item.year}
       </div>
 
@@ -67,15 +73,22 @@ function LogRow({ item, index, inView, last }) {
         {!last && <span style={{ width: 1, flexGrow: 1, background: 'var(--border)', marginTop: 6 }} />}
       </div>
 
-      <div style={{ paddingBottom: last ? 0 : 'clamp(2rem, 5vw, 3.25rem)' }}>
-        <h3 className="mega" style={{ fontSize: 'clamp(1.3rem, 3vw, 2rem)', marginBottom: '0.5rem' }}>
-          {item.title}
-        </h3>
-        <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: '560px' }}>
-          {item.detail}
-        </p>
+      <div style={{ paddingBottom: last ? 0 : 'clamp(1.25rem, 3vw, 2rem)' }}>
+        <Tilt max={3} scale={1}>
+          <div
+            className="glass glass-hover"
+            style={{ padding: 'clamp(1.2rem, 2.5vw, 1.75rem)', maxWidth: '620px' }}
+          >
+            <h3 className="mega" style={{ fontSize: 'clamp(1.3rem, 3vw, 2rem)', marginBottom: '0.5rem' }}>
+              {item.title}
+            </h3>
+            <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.7 }}>
+              {item.detail}
+            </p>
+          </div>
+        </Tilt>
       </div>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -85,10 +98,15 @@ export default function Trajectory() {
 
   return (
     <section id="trajectory" ref={ref} className="cv-auto" style={{ padding: 'clamp(5rem, 10vw, 10rem) clamp(1.25rem, 5vw, 6rem)', position: 'relative', overflow: 'hidden', background: 'var(--bg-2)' }}>
-      <SectionNum n="02" />
+      <Orbs
+        items={[
+          { top: '5%', left: '-8%', size: '38vw', color: 'var(--orb-2)', speed: 0.18 },
+          { bottom: '5%', right: '-6%', size: '34vw', color: 'var(--orb-1)', speed: 0.28 },
+        ]}
+      />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <p className="eyebrow" style={{ marginBottom: '1rem' }}>02 / Flight log</p>
+        <p className="eyebrow" style={{ marginBottom: '1rem' }}>Timeline</p>
 
         <h2 className="mega" style={{ fontSize: 'clamp(3rem, 10vw, 8rem)', marginBottom: 'clamp(2.5rem, 6vw, 4.5rem)' }}>
           <SplitReveal text="TRAJECTORY" inView={inView} delay={0.05} />

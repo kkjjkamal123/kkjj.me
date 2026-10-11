@@ -1,4 +1,31 @@
 
+/* ── Self-hosted fonts ───────────────────────────────────────
+   Served from /public/fonts. Same-origin means no render-blocking
+   third-party stylesheet and no extra connection setup; `swap` keeps
+   text visible while a face is still loading. */
+@font-face {
+  font-family: 'Anton';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/anton-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Anton';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/anton-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face { font-family: 'General Sans'; font-weight: 400; font-style: normal; font-display: swap; src: url('/fonts/general-sans-400.woff2') format('woff2'); }
+@font-face { font-family: 'General Sans'; font-weight: 500; font-style: normal; font-display: swap; src: url('/fonts/general-sans-500.woff2') format('woff2'); }
+@font-face { font-family: 'General Sans'; font-weight: 600; font-style: normal; font-display: swap; src: url('/fonts/general-sans-600.woff2') format('woff2'); }
+@font-face { font-family: 'General Sans'; font-weight: 700; font-style: normal; font-display: swap; src: url('/fonts/general-sans-700.woff2') format('woff2'); }
+
 *,
 *::before,
 *::after {
@@ -8,6 +35,9 @@
 }
 
 :root {
+  /* Native UI — scrollbars, form controls — follows the theme too */
+  color-scheme: dark;
+
   --bg: #06080f;
   --bg-2: #0b0e17;
   --bg-3: #121626;
@@ -19,7 +49,10 @@
   --accent-glow: rgba(46, 107, 255, 0.22);
   --text: #f2f4f8;
   --text-muted: #8b90a0;
-  --text-dim: #494e5e;
+  /* Small copy — clears WCAG AA (5:1 on --bg) */
+  --text-dim: #7a8092;
+  /* Large decorative display type only — clears 3:1 */
+  --text-faint: #5c6173;
   --border: rgba(255, 255, 255, 0.09);
   --card: #0c0f18;
   --radius: 2px;
@@ -36,9 +69,38 @@
   --telem-bg: rgba(8, 12, 22, 0.72);
   --telem-border: rgba(77, 132, 255, 0.28);
   --row-border: rgba(255, 255, 255, 0.05);
+
+  /* ── Glass system ──────────────────────────────────────────── */
+  --glass-bg: rgba(255, 255, 255, 0.035);
+  --glass-bg-strong: rgba(255, 255, 255, 0.075);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  /* Specular edge where light catches, and the dim far edge opposite it */
+  --glass-highlight: rgba(255, 255, 255, 0.4);
+  --glass-edge-far: rgba(77, 132, 255, 0.14);
+  /* Inner surfaces that give the pane thickness */
+  --glass-inset-top: rgba(255, 255, 255, 0.1);
+  --glass-inset-bottom: rgba(0, 0, 0, 0.22);
+  --glass-blur: 22px;
+  --glass-radius: 16px;
+  --glass-radius-sm: 12px;
+
+  /* Elevation — cast shadow + ambient occlusion, tuned for dark */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 4px 16px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-3: 0 16px 48px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-accent: 0 12px 40px rgba(46, 107, 255, 0.22);
+
+  /* Ambient light sources that glass panes sit in front of */
+  --orb-1: rgba(46, 107, 255, 0.16);
+  --orb-2: rgba(122, 90, 255, 0.1);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 [data-theme="light"] {
+  color-scheme: light;
+
   --bg: #f3f5fa;
   --bg-2: #e8ecf5;
   --bg-3: #dde3f0;
@@ -49,7 +111,8 @@
   --accent-glow: rgba(37, 99, 235, 0.18);
   --text: #10131c;
   --text-muted: #4f5567;
-  --text-dim: #767d92;
+  --text-dim: #5f6679;
+  --text-faint: #7d8499;
   --border: rgba(10, 20, 60, 0.13);
   --card: #ffffff;
   --grid-line: rgba(29, 78, 216, 0.08);
@@ -62,27 +125,69 @@
   --telem-bg: rgba(255, 255, 255, 0.85);
   --telem-border: rgba(29, 78, 216, 0.3);
   --row-border: rgba(0, 0, 0, 0.08);
+
+  /* Glass on light needs to lean white and opaque, not transparent-dark */
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-bg-strong: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-highlight: rgba(255, 255, 255, 1);
+  --glass-edge-far: rgba(29, 78, 216, 0.18);
+  --glass-inset-top: rgba(255, 255, 255, 0.9);
+  --glass-inset-bottom: rgba(16, 24, 60, 0.07);
+
+  --shadow-1: 0 1px 2px rgba(16, 24, 60, 0.06);
+  --shadow-2: 0 4px 16px rgba(16, 24, 60, 0.08), 0 1px 2px rgba(16, 24, 60, 0.04);
+  --shadow-3: 0 16px 48px rgba(16, 24, 60, 0.12), 0 2px 8px rgba(16, 24, 60, 0.06);
+  --shadow-accent: 0 12px 40px rgba(29, 78, 216, 0.18);
+
+  --orb-1: rgba(29, 78, 216, 0.1);
+  --orb-2: rgba(122, 90, 255, 0.07);
 }
 
 html {
   scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-html.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-html.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-html.lenis.lenis-stopped {
+/* Present for screen readers, absent visually */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard users land here first; it stays off-screen until focused. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 10000;
+  padding: 0.6rem 1rem;
+  border-radius: 100px;
+  background: var(--accent-fill);
+  color: var(--accent-ink);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 0.2s var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* The navbar is fixed and ~60px tall. Without this, a section landed by
+   an anchor jump starts underneath it. */
+section[id],
+:target {
+  scroll-margin-top: 84px;
 }
 
 body {
@@ -92,6 +197,8 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   transition: background 0.4s ease, color 0.4s ease;
 }
 
@@ -149,25 +256,234 @@ button {
   color: var(--accent-ink);
 }
 
-/* ── Section number watermarks ───────────────────────────────── */
-.section-num {
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ══ GLASS ═══════════════════════════════════════════════════════
+   A pane reads as glass from three cues, not one: it blurs what's
+   behind it, it carries a bright top edge where light catches, and
+   it casts a shadow onto the layer below. Blur alone looks like
+   flat translucency. */
+.glass {
+  position: relative;
+  /* Directional tint, not a flat wash — light reads as coming from the
+     top-left, which is what gives the pane an orientation in space. */
+  background: linear-gradient(150deg, var(--glass-bg-strong) 0%, var(--glass-bg) 55%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  /* Three stacked cues: cast shadow (sits above the page), inner top
+     highlight and inner bottom shade (the pane has thickness). */
+  box-shadow:
+    var(--shadow-2),
+    inset 0 1px 0 var(--glass-inset-top),
+    inset 0 -1px 0 var(--glass-inset-bottom);
+  isolation: isolate;
+  /* Confine paint work to the pane so a hover on one card can't
+     invalidate the rest of the section. */
+  contain: paint;
+}
+
+/* Refracted edge — a 1px gradient border, bright where light catches
+   the top-left and falling off before the opposite corner. Masked so
+   only the border ring paints, not the fill. */
+.glass::before {
+  content: '';
   position: absolute;
-  top: clamp(1.5rem, 4vw, 3rem);
-  right: clamp(1.25rem, 5vw, 6rem);
-  font-size: clamp(5rem, 14vw, 11rem);
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--watermark-stroke);
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(150deg, var(--glass-highlight) 0%, transparent 42%, transparent 60%, var(--glass-edge-far) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glass-strong {
+  background: linear-gradient(150deg, var(--glass-bg-strong) 0%, var(--glass-bg-strong) 40%, var(--glass-bg) 100%);
+  box-shadow:
+    var(--shadow-3),
+    inset 0 1px 0 var(--glass-inset-top),
+    inset 0 -1px 0 var(--glass-inset-bottom);
+}
+
+.glass-sm {
+  border-radius: var(--glass-radius-sm);
+}
+
+/* Interactive glass — lifts toward the light on hover */
+.glass-hover {
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out),
+    background 0.4s var(--ease-out), border-color 0.4s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .glass-hover:hover {
+    transform: translateY(-4px);
+    background: var(--glass-bg-strong);
+    border-color: rgba(77, 132, 255, 0.35);
+    box-shadow: var(--shadow-3), var(--shadow-accent);
+  }
+}
+
+.glass-hover:active {
+  transform: translateY(-1px);
+  transition-duration: 0.1s;
+}
+
+/* ══ AMBIENT ORBS ════════════════════════════════════════════════
+   Soft colour fields behind glass. Without something to refract,
+   backdrop-blur has nothing to show and the panes look grey. */
+/* No filter: blur() here on purpose. A radial-gradient with a soft
+   falloff already looks identical, and blurring a 45vw layer costs a
+   full-surface repaint every parallax frame. Transform-only movement
+   keeps these on the compositor. */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
   z-index: 0;
-  user-select: none;
+  transform: translateZ(0);
+  contain: strict;
+}
+
+/* ══ STARFIELD ═══════════════════════════════════════════════════ */
+.star {
+  position: absolute;
+  border-radius: 50%;
+  animation-name: star-twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.9; }
+}
+
+/* ══ BENTO GRID ══════════════════════════════════════════════════ */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  grid-auto-rows: minmax(120px, auto);
+}
+
+/* Spans travel as custom properties so each breakpoint can clamp them.
+   A `span 7` child inside a 6-column grid would spill into implicit
+   columns and break the row rhythm. */
+.bento > * {
+  min-width: 0;
+  grid-column: span var(--span, 12);
+  grid-row: span var(--row-span, 1);
+}
+
+@media (max-width: 900px) {
+  .bento {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .bento > * {
+    grid-column: span var(--span-md, 6);
+    grid-row: span 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .bento {
+    grid-template-columns: 1fr;
+  }
+
+  .bento > * {
+    grid-column: 1 / -1;
+    grid-row: span 1;
+  }
+}
+
+/* ══ MICROINTERACTIONS ═══════════════════════════════════════════ */
+.lift {
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out), color 0.3s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.lift:active {
+  transform: translateY(0);
+  transition-duration: 0.08s;
+}
+
+/* Shared button geometry. <a> and <button> otherwise resolve
+   line-height differently, so a row mixing both comes out uneven. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.25rem;
+  padding: 0 2.2rem;
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Primary button — accent glow that blooms on hover */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  background: var(--accent-fill);
+  color: var(--accent-ink);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-2);
+  transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+
+/* Sheen sweep on hover */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, 0.25) 50%, transparent 75%);
+  transform: translateX(-100%);
+  transition: transform 0.7s var(--ease-out);
   pointer-events: none;
 }
 
-/* ── Below-fold sections: skip rendering while off-screen ────── */
-.cv-auto {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 900px;
+@media (hover: hover) {
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-3), var(--shadow-accent);
+  }
+
+  .btn-primary:hover::after {
+    transform: translateX(100%);
+  }
 }
+
+.btn-primary:active {
+  transform: translateY(0);
+  transition-duration: 0.08s;
+}
+
+/* ── Below-fold sections ─────────────────────────────────────
+   No content-visibility here on purpose: placeholder heights for
+   skipped sections made anchor jumps land hundreds of px short. */
+
 
 /* ── Hero blueprint grid ─────────────────────────────────────── */
 .hero-blueprint {
@@ -182,18 +498,14 @@ button {
   mask-image: radial-gradient(ellipse 80% 70% at 50% 42%, #000 25%, transparent 74%);
 }
 
-/* ── Grain overlay ───────────────────────────────────────────── */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9990;
-  pointer-events: none;
-  opacity: 0.04;
-  transform: translateZ(0); /* Hardware acceleration */
-  will-change: transform;
+/* ── Marquee ─────────────────────────────────────────────────── */
+.marquee {
+  overflow: hidden;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
 
-/* ── Marquee ─────────────────────────────────────────────────── */
 .marquee-track {
   display: flex;
   width: max-content;
@@ -207,12 +519,28 @@ button {
   }
 
   to {
-    transform: translateX(-25%);
+    transform: translateX(-50%);
   }
 }
 
 .marquee-track:hover {
   animation-play-state: paused;
+}
+
+/* ── Live-status pulse dot ───────────────────────────────────── */
+.pulse-dot {
+  animation: pulse-dot var(--pulse-duration, 2.4s) ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: var(--pulse-min, 0.25); }
+}
+
+/* Set by usePauseOffscreen: freeze infinite loops nobody can see */
+[data-offscreen],
+[data-offscreen] * {
+  animation-play-state: paused !important;
 }
 
 /* ── Project index rows ──────────────────────────────────────── */
@@ -293,4 +621,72 @@ body.reduce-motion *::after {
   body.has-cursor button {
     cursor: auto;
   }
+}
+
+/* Backdrop-filter is the one cue we can't fake — fall back to a
+   solid tint so panes stay readable rather than washing out. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: var(--card);
+  }
+
+  [data-theme="light"] .glass {
+    background: #ffffff;
+  }
+}
+
+/* ══ MOBILE TUNING ═══════════════════════════════════════════════
+   Backdrop blur cost scales with radius, not with having it at all,
+   so phones keep real glass at a smaller radius rather than losing
+   it. The tint steps up slightly to preserve contrast at the lower
+   radius, and saturate() is dropped — it is a second filter pass for
+   an effect that barely reads at this size. */
+@media (max-width: 820px) {
+  :root {
+    --glass-blur: 12px;
+    --glass-bg: rgba(255, 255, 255, 0.055);
+    --glass-bg-strong: rgba(255, 255, 255, 0.1);
+  }
+
+  [data-theme="light"] {
+    --glass-blur: 12px;
+    --glass-bg: rgba(255, 255, 255, 0.72);
+    --glass-bg-strong: rgba(255, 255, 255, 0.88);
+  }
+
+  .glass {
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+  }
+}
+
+/* Last resort for low-end devices that ask for reduced data or where
+   the blur genuinely cannot hold frame rate. */
+@media (max-width: 820px) and (prefers-reduced-motion: reduce) {
+  .glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(18, 22, 34, 0.86);
+  }
+
+  [data-theme="light"] .glass {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
+/* Coarse pointers get no tilt/lift transforms at all */
+@media (hover: none) {
+  .glass-hover,
+  .lift,
+  .btn-primary {
+    transition: none;
+  }
+
+  .btn-primary::after {
+    display: none;
+  }
+}
+
+main:focus {
+  outline: none;
 }

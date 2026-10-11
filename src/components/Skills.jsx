@@ -1,8 +1,8 @@
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import Marquee from './Marquee'
 import SplitReveal from './SplitReveal'
-import SectionNum from './SectionNum'
+import Orbs from './Orbs'
 
 const categories = [
   {
@@ -29,7 +29,7 @@ const categories = [
 
 function SkillRow({ cat, index, inView }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: 0.15 + index * 0.1 }}
@@ -69,7 +69,7 @@ function SkillRow({ cat, index, inView }) {
           </span>
         ))}
       </Marquee>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -84,19 +84,15 @@ export default function Skills() {
       position: 'relative',
       overflow: 'hidden',
     }}>
-      <SectionNum n="04" />
-      <div style={{
-        position: 'absolute',
-        bottom: '-20%',
-        left: '-10%',
-        width: '50vw',
-        height: '50vw',
-        background: 'radial-gradient(circle, var(--accent-dim) 0%, transparent 65%)',
-        pointerEvents: 'none',
-      }} />
+      <Orbs
+        items={[
+          { bottom: '-18%', left: '-10%', size: '46vw', color: 'var(--orb-1)', speed: 0.22 },
+          { top: '0%', right: '-8%', size: '32vw', color: 'var(--orb-2)', speed: 0.32 },
+        ]}
+      />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
-        <p className="eyebrow" style={{ marginBottom: '1rem' }}>04 / The garage</p>
+        <p className="eyebrow" style={{ marginBottom: '1rem' }}>Tools</p>
 
         <h2 className="mega" style={{ fontSize: 'clamp(3rem, 10vw, 8rem)', marginBottom: '3rem' }}>
           <SplitReveal text="TOOLKIT" inView={inView} delay={0.05} />

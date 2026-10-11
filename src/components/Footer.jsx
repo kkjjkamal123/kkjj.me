@@ -17,7 +17,7 @@ export default function Footer() {
       <div style={{ padding: '1.5rem 0', borderBottom: '1px solid var(--border)' }}>
         <Marquee duration={30}>
           {PHRASES.map((phrase, i) => (
-            <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '3rem', fontFamily: 'var(--display)', fontSize: 'clamp(1.1rem, 2.5vw, 1.8rem)', fontWeight: 600, color: 'var(--text-dim)', letterSpacing: '-0.01em', whiteSpace: 'nowrap', marginRight: '3rem' }}>
+            <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '3rem', fontFamily: 'var(--display)', fontSize: 'clamp(1.1rem, 2.5vw, 1.8rem)', fontWeight: 600, color: 'var(--text-faint)', letterSpacing: '-0.01em', whiteSpace: 'nowrap', marginRight: '3rem' }}>
               {phrase}
               <span style={{ color: 'var(--accent)' }}>&#9670;</span>
             </span>

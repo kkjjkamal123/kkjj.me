@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { useAnimations } from './AnimationContext'
 
 export default function AnimationToggle() {
@@ -26,7 +26,7 @@ export default function AnimationToggle() {
     >
       <AnimatePresence mode="wait" initial={false}>
         {animationsEnabled ? (
-          <motion.svg
+          <m.svg
             key="pause"
             width="16"
             height="16"
@@ -43,9 +43,9 @@ export default function AnimationToggle() {
           >
             <rect x="6" y="4" width="4" height="16"></rect>
             <rect x="14" y="4" width="4" height="16"></rect>
-          </motion.svg>
+          </m.svg>
         ) : (
-          <motion.svg
+          <m.svg
             key="play"
             width="16"
             height="16"
@@ -61,7 +61,7 @@ export default function AnimationToggle() {
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
             <polygon points="5 3 19 12 5 21 5 3"></polygon>
-          </motion.svg>
+          </m.svg>
         )}
       </AnimatePresence>
     </button>

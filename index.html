@@ -7,28 +7,68 @@
     <meta name="theme-color" content="#06080f" />
 
     <!-- Primary meta -->
-    <meta name="description" content="Kamalesh VS — builder of embedded systems, computer vision & AI, now engineering a rocket from airframe to telemetry." />
+    <meta name="description" content="Kamalesh VS, ECE undergraduate in Chennai working on embedded systems, computer vision and on-device AI. Built ENTITY, an Android LLM runtime tuned to Arm CPUs." />
     <meta name="author" content="Kamalesh VS" />
 
     <!-- Open Graph / social previews -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="kkjj.me — Kamalesh VS" />
-    <meta property="og:description" content="Embedded systems, computer vision & AI — and now rockets. I build things that sense, move, and fly." />
+    <meta property="og:description" content="ENTITY: 47% faster token generation than Arm's own reference app on the same phone, with a warning merged into llama.cpp. Plus a model rocket designed from the motor up." />
     <meta property="og:image" content="https://avatars.githubusercontent.com/u/76260512?v=4" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="kkjj.me — Kamalesh VS" />
-    <meta name="twitter:description" content="Embedded systems, computer vision & AI — and now rockets." />
+    <meta name="twitter:description" content="Embedded systems, computer vision and on-device AI. Built ENTITY, an Android LLM runtime tuned to Arm CPUs." />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://api.fontshare.com" />
-    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
-    <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
+    <link rel="canonical" href="https://kkjj.me/" />
+    <meta property="og:url" content="https://kkjj.me/" />
+
+    <!-- Fonts are self-hosted (see @font-face in src/index.css): no
+         render-blocking third-party stylesheet, no extra DNS/TLS round
+         trips. The two faces above the fold are preloaded. -->
+    <link rel="preload" href="/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/general-sans-400.woff2" as="font" type="font/woff2" crossorigin />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Kamalesh VS",
+        "url": "https://kkjj.me/",
+        "image": "https://avatars.githubusercontent.com/u/76260512?v=4",
+        "jobTitle": "Electronics and Communication Engineering undergraduate",
+        "knowsAbout": ["Embedded systems", "Computer vision", "On-device AI", "Model rocketry"],
+        "address": { "@type": "PostalAddress", "addressLocality": "Chennai", "addressCountry": "IN" },
+        "sameAs": ["https://github.com/kkjjkamal123", "https://www.linkedin.com/in/kkjjkamal/"]
+      }
+    </script>
+    <!-- Applied before first paint. Reading the stored theme from React
+         instead means the page paints dark, then flips — a visible flash
+         for anyone whose choice is light. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme')
+          if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+          }
+          document.documentElement.setAttribute('data-theme', t)
+          var meta = document.querySelector('meta[name="theme-color"]')
+          if (meta) meta.setAttribute('content', t === 'light' ? '#f3f5fa' : '#06080f')
+        } catch (e) { /* storage blocked — dark is the default */ }
+      })()
+    </script>
+
     <title>kkjj.me — Kamalesh VS</title>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="max-width:40rem;margin:4rem auto;padding:0 1.25rem;font-family:system-ui,sans-serif;line-height:1.6;color:#f2f4f8">
+        <h1>Kamalesh VS</h1>
+        <p>ECE undergraduate in Chennai, India, working on embedded systems, computer vision and on-device AI.</p>
+        <p><a style="color:#4d84ff" href="/CV.pdf">CV</a> · <a style="color:#4d84ff" href="https://github.com/kkjjkamal123">GitHub</a> · <a style="color:#4d84ff" href="https://www.linkedin.com/in/kkjjkamal/">LinkedIn</a> · <a style="color:#4d84ff" href="mailto:kkjjwork123@gmail.com">kkjjwork123@gmail.com</a></p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

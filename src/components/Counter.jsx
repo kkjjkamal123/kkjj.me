@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 
 // Counts up from 0 to a numeric target once it scrolls into view.
-// Non-numeric targets (e.g. "4+") render as-is after a short delay.
+// Values that are not purely numeric ("6+", "05+") keep whatever
+// trails the digits, and any leading zeros are preserved so the
+// count-up ends on exactly the string that was passed in.
 export default function Counter({ value, inView, duration = 1.2, style }) {
-  const numeric = typeof value === 'number' ? value : parseInt(value, 10)
-  const suffix = typeof value === 'string' ? value.replace(/^[0-9]+/, '') : ''
+  const text = String(value ?? '')
+  const digits = text.match(/^\d+/)
+  const numeric = digits ? Number(digits[0]) : NaN
+  const pad = digits ? digits[0].length : 0
+  const suffix = digits ? text.slice(digits[0].length) : ''
+
   const [display, setDisplay] = useState(0)
   const started = useRef(false)
 
@@ -23,6 +29,6 @@ export default function Counter({ value, inView, duration = 1.2, style }) {
     return () => cancelAnimationFrame(raf)
   }, [inView, numeric, duration])
 
-  if (Number.isNaN(numeric)) return <span style={style}>{value}</span>
-  return <span style={style}>{display}{suffix}</span>
+  if (Number.isNaN(numeric)) return <span style={style}>{text}</span>
+  return <span style={style}>{String(display).padStart(pad, '0')}{suffix}</span>
 }

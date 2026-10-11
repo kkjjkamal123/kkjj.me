@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 // Character-level split animation inspired by landonorris.com
 // Each character animates up from behind a mask with staggered timing.
@@ -19,7 +19,8 @@ export default function SplitReveal({
 
   return (
     <Tag style={{ display: 'block', ...style }}>
-      <span style={{ display: 'inline-flex', flexWrap: 'wrap', columnGap: '0.25em' }}>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true" style={{ display: 'inline-flex', flexWrap: 'wrap', columnGap: '0.25em' }}>
         {words.map((word, wIdx) => (
           <span key={wIdx} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
             {word.split('').map((char, cIdx) => {
@@ -34,10 +35,9 @@ export default function SplitReveal({
                     marginBottom: '-0.06em',
                   }}
                 >
-                  <motion.span
+                  <m.span
                     style={{
                       display: 'inline-block',
-                      willChange: 'transform, opacity',
                       ...charStyle,
                     }}
                     initial={{ y: '120%', opacity: 0 }}
@@ -53,7 +53,7 @@ export default function SplitReveal({
                     }}
                   >
                     {char}
-                  </motion.span>
+                  </m.span>
                 </span>
               )
             })}
