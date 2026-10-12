@@ -29,13 +29,23 @@ export const FALLBACK_PROFILE = {
   name: 'Kamalesh VS',
   avatar_url: 'https://avatars.githubusercontent.com/u/76260512?v=4',
   html_url: GH_URL,
-  public_repos: 30,
+  public_repos: 31,
   followers: 24,
   following: 21,
   created_at: '2020-12-19T17:19:37Z',
 }
 
 export const FALLBACK_REPOS = [
+  {
+    "name": "Ultstat",
+    "description": "Menu-bar system monitor and battery charge limiter for Apple silicon Macs: CPU, GPU, memory, temps, power, processes, plus charge limit, sailing and calibration. 0.85 ms/s idle CPU. Swift, macOS 26+.",
+    "language": "Swift",
+    "stargazers_count": 0,
+    "html_url": "https://github.com/kkjjkamal123/Ultstat",
+    "homepage": "",
+    "updated_at": "2026-10-12T13:35:00Z",
+    "fork": false
+  },
   {
     "name": "Agentic-OS",
     "description": "A macOS desktop OS for AI agents: describe a goal and Claude, GPT, Gemini, Ollama and CLI agents plan, build in parallel, cross-review, test and ship it. Electron + React, Obsidian Brain sync.",
