@@ -1,5 +1,6 @@
 import { useRef } from 'react'
-import { m, useInView } from 'framer-motion'
+import { m, useInView, useScroll, useTransform } from 'framer-motion'
+import { useAnimations } from './AnimationContext'
 import SplitReveal from './SplitReveal'
 import Orbs from './Orbs'
 import Tilt from './Tilt'
@@ -39,14 +40,27 @@ const LOG = [
   },
   {
     year: 'NOW',
-    title: 'Project Apex',
-    detail: 'A rocket, from airframe to telemetry. Fin geometry, CP/CG tuning and a live downlink.',
+    title: 'Model Rocket V1',
+    detail: 'A 3D-printed rocket, from airframe to avionics. Fin geometry, CP/CG tuning and an IMU + barometer flight log.',
   },
 ]
 
-function LogRow({ item, index, inView, last }) {
+// Scroll-linked rail. Each row owns its own segment of the line; the
+// segment fills as the row crosses the reading line (60% down the
+// viewport) and the row's node lights up as the fill reaches it. The
+// rows tile vertically, so the segments read as one line filling down.
+// Values are motion values bound straight to style — no React render
+// happens while scrolling.
+function LogRow({ item, index, inView, last, live }) {
+  const rowRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: rowRef, offset: ['start 60%', 'end 60%'] })
+  const fill = useTransform(scrollYProgress, [0, 1], [0, 1])
+  const lit = useTransform(scrollYProgress, [0, 0.04], [0, 1])
+  const now = item.year === 'NOW'
+
   return (
     <m.div
+      ref={rowRef}
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.55, delay: 0.25 + index * 0.12 }}
@@ -58,19 +72,43 @@ function LogRow({ item, index, inView, last }) {
         alignItems: 'start',
       }}
     >
-      <div className="mega" style={{ fontSize: 'clamp(1.6rem, 4vw, 2.6rem)', color: item.year === 'NOW' ? 'var(--accent)' : 'var(--text-faint)', lineHeight: 1.1, textAlign: 'right' }}>
-        {item.year}
+      <div className="mega" style={{ position: 'relative', fontSize: 'clamp(1.6rem, 4vw, 2.6rem)', lineHeight: 1.1, textAlign: 'right' }}>
+        <span style={{ color: now ? 'var(--accent)' : 'var(--text-faint)' }}>{item.year}</span>
+        {/* Accent copy of the year, faded in as the row is reached */}
+        {!now && (
+          <m.span aria-hidden="true" style={{ position: 'absolute', inset: 0, color: 'var(--text)', opacity: live ? lit : 0 }}>
+            {item.year}
+          </m.span>
+        )}
       </div>
 
-      {/* Rail node */}
+      {/* Rail node + this row's segment of the line */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', alignSelf: 'stretch', paddingTop: '0.55em' }} aria-hidden="true">
-        <span style={{
-          width: 11, height: 11, borderRadius: '50%', flexShrink: 0,
-          background: item.year === 'NOW' ? 'var(--accent-fill)' : 'transparent',
-          border: '2px solid var(--accent)',
-          boxShadow: item.year === 'NOW' ? '0 0 14px var(--accent-glow), 0 0 4px var(--accent-glow)' : 'none',
-        }} />
-        {!last && <span style={{ width: 1, flexGrow: 1, background: 'var(--border)', marginTop: 6 }} />}
+        <span style={{ position: 'relative', width: 11, height: 11, flexShrink: 0 }}>
+          <span style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '2px solid var(--accent)', background: now ? 'var(--accent-fill)' : 'var(--bg-2)' }} />
+          <m.span
+            style={{
+              position: 'absolute', inset: -1, borderRadius: '50%',
+              background: 'var(--accent-fill)',
+              boxShadow: '0 0 0 4px var(--accent-dim), 0 0 16px var(--accent-glow)',
+              opacity: live ? lit : (now ? 1 : 0),
+              scale: live ? lit : 1,
+            }}
+          />
+        </span>
+        {!last && (
+          <span style={{ position: 'relative', width: 1, flexGrow: 1, background: 'var(--border)', marginTop: 6, marginBottom: -6 }}>
+            <m.span
+              style={{
+                position: 'absolute', inset: 0, width: 2, left: -0.5,
+                background: 'linear-gradient(180deg, var(--accent-fill), var(--accent))',
+                boxShadow: '0 0 10px var(--accent-glow)',
+                transformOrigin: '50% 0%',
+                scaleY: live ? fill : 0,
+              }}
+            />
+          </span>
+        )}
       </div>
 
       <div style={{ paddingBottom: last ? 0 : 'clamp(1.25rem, 3vw, 2rem)' }}>
@@ -95,6 +133,7 @@ function LogRow({ item, index, inView, last }) {
 export default function Trajectory() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, amount: 0.15 })
+  const { animationsEnabled } = useAnimations()
 
   return (
     <section id="trajectory" ref={ref} className="cv-auto" style={{ padding: 'clamp(5rem, 10vw, 10rem) clamp(1.25rem, 5vw, 6rem)', position: 'relative', overflow: 'hidden', background: 'var(--bg-2)' }}>
@@ -114,7 +153,7 @@ export default function Trajectory() {
 
         <div>
           {LOG.map((item, i) => (
-            <LogRow key={item.year + item.title} item={item} index={i} inView={inView} last={i === LOG.length - 1} />
+            <LogRow key={item.year + item.title} item={item} index={i} inView={inView} last={i === LOG.length - 1} live={animationsEnabled} />
           ))}
         </div>
       </div>

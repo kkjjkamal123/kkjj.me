@@ -3,6 +3,7 @@ import { m, useInView } from 'framer-motion'
 import Magnetic from './Magnetic'
 import { useAnimations } from './AnimationContext'
 import Orbs from './Orbs'
+import RocketBlueprint from './RocketBlueprint'
 import { usePauseOffscreen } from '../lib/scroll'
 
 // ── Edit these to rename / re-describe your rocket project ──────────────
@@ -116,15 +117,15 @@ export default function FeaturedRocket() {
           <span className="glass glass-sm" style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
             fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.08em',
-            color: '#fbbf24', borderColor: 'rgba(251,191,36,0.3)',
+            color: 'var(--warn)', borderColor: 'var(--warn-border)',
             borderRadius: 100, padding: '0.3rem 0.85rem', boxShadow: 'var(--shadow-1)',
           }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#fbbf24' }} />
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--warn)' }} />
             {PROJECT.status}
           </span>
         </m.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 'clamp(2rem, 5vw, 5rem)', alignItems: 'center' }} className="rocket-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.25fr) minmax(0, 0.75fr)', gap: 'clamp(2rem, 5vw, 5rem)', alignItems: 'center' }} className="rocket-grid">
           {/* Left: copy */}
           <div style={{ maxWidth: '800px' }}>
             <m.h2
@@ -163,7 +164,7 @@ export default function FeaturedRocket() {
                   className="glass glass-sm glass-hover"
                   style={{ padding: '1.2rem 1.3rem' }}
                 >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '0.6rem' }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '0.6rem' }} aria-hidden="true">
                     {focusIcon[f.icon]}
                   </svg>
                   <div style={{ fontSize: '0.92rem', fontWeight: 700, marginBottom: '0.25rem', letterSpacing: '-0.01em' }}>{f.title}</div>
@@ -198,7 +199,7 @@ export default function FeaturedRocket() {
                       }}
                     >
                       {primary.label}
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg>
                     </a>
                   </Magnetic>
                 )
@@ -223,12 +224,22 @@ export default function FeaturedRocket() {
               )}
             </m.div>
           </div>
+
+          <m.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="rocket-figure"
+          >
+            <RocketBlueprint />
+          </m.div>
         </div>
       </div>
 
       <style>{`
         @media (max-width: 820px) {
           .rocket-grid { grid-template-columns: minmax(0, 1fr) !important; }
+          .rocket-figure { max-width: 400px; width: 100%; justify-self: center; }
         }
       `}</style>
     </section>

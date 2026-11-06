@@ -69,6 +69,10 @@
   --telem-bg: rgba(8, 12, 22, 0.72);
   --telem-border: rgba(77, 132, 255, 0.28);
   --row-border: rgba(255, 255, 255, 0.05);
+  /* Status colours: "live" badge and the rocket's progress chip */
+  --live: #22c55e;
+  --warn: #fbbf24;
+  --warn-border: rgba(251, 191, 36, 0.3);
 
   /* ── Glass system ──────────────────────────────────────────── */
   --glass-bg: rgba(255, 255, 255, 0.035);
@@ -125,6 +129,11 @@
   --telem-bg: rgba(255, 255, 255, 0.85);
   --telem-border: rgba(29, 78, 216, 0.3);
   --row-border: rgba(0, 0, 0, 0.08);
+  /* The dark theme's green and amber fall to ~2:1 on these paper
+     backgrounds; these darker shades keep small labels above 4.5:1. */
+  --live: #15803d;
+  --warn: #92400e;
+  --warn-border: rgba(146, 64, 14, 0.35);
 
   /* Glass on light needs to lean white and opaque, not transparent-dark */
   --glass-bg: rgba(255, 255, 255, 0.55);
@@ -689,4 +698,152 @@ body.reduce-motion *::after {
 
 main:focus {
   outline: none;
+}
+
+/* ── Rocket blueprint (FeaturedRocket) ───────────────────────── */
+.blueprint-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 22px 22px;
+  background-position: center;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 30%, transparent 85%);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 30%, transparent 85%);
+}
+
+/* A slow hover, as if holding on the pad. transform-box keeps the SVG
+   group translating in its own user space. */
+.bp-float {
+  transform-box: fill-box;
+  animation: bp-float 6s ease-in-out infinite;
+}
+
+@keyframes bp-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+.bp-flame {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: bp-flame 0.18s ease-in-out infinite alternate;
+}
+
+.bp-flame-2 {
+  animation-duration: 0.13s;
+  animation-delay: -0.05s;
+}
+
+@keyframes bp-flame {
+  from { transform: scaleY(0.82) scaleX(0.94); }
+  to { transform: scaleY(1.08) scaleX(1.02); }
+}
+
+/* Avionics status LED */
+.bp-led {
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+/* ── Contribution heatmap (ContributionGraph) ────────────────── */
+:root {
+  --heat-0: rgba(255, 255, 255, 0.045);
+  --heat-1: rgba(46, 107, 255, 0.3);
+  --heat-2: rgba(46, 107, 255, 0.55);
+  --heat-3: rgba(77, 132, 255, 0.8);
+  --heat-4: #7aa3ff;
+}
+
+[data-theme="light"] {
+  --heat-0: rgba(10, 20, 60, 0.07);
+  --heat-1: rgba(29, 78, 216, 0.25);
+  --heat-2: rgba(29, 78, 216, 0.5);
+  --heat-3: rgba(29, 78, 216, 0.75);
+  --heat-4: #1d4ed8;
+}
+
+.heat-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.heat {
+  display: grid;
+  grid-template-rows: auto repeat(7, auto);
+  gap: 3px;
+  min-width: 640px;
+}
+
+.heat-month {
+  grid-row: 1;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding-bottom: 0.35rem;
+  white-space: nowrap;
+}
+
+.heat-cell {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: var(--heat-0);
+}
+
+.heat-cell[data-level="1"] { background: var(--heat-1); }
+.heat-cell[data-level="2"] { background: var(--heat-2); }
+.heat-cell[data-level="3"] { background: var(--heat-3); }
+.heat-cell[data-level="4"] { background: var(--heat-4); box-shadow: 0 0 8px var(--accent-glow); }
+
+.heat-legend {
+  width: 10px;
+  height: 10px;
+}
+
+/* Cells sweep in column by column, left to right, once in view */
+.heat .heat-cell {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+.heat.heat-on .heat-cell {
+  animation: heat-in 0.5s var(--ease-out) var(--d, 0ms) both;
+}
+
+@keyframes heat-in {
+  from { opacity: 0; transform: scale(0.4); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (hover: hover) {
+  .heat.heat-on .heat-cell {
+    transition: transform 0.15s var(--ease-out);
+  }
+
+  .heat.heat-on .heat-cell:hover {
+    transform: scale(1.6);
+    outline: 1px solid var(--accent);
+    outline-offset: 1px;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.heat-skeleton {
+  min-width: 640px;
+  aspect-ratio: 53 / 8;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--heat-0) 0%, var(--accent-dim) 50%, var(--heat-0) 100%);
+  background-size: 200% 100%;
+  animation: heat-shimmer 1.4s linear infinite;
+}
+
+@keyframes heat-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
 }

@@ -4,11 +4,12 @@ import { GH_URL, GH_USER, LANG_COLORS, totalStars } from '../lib/github'
 import SplitReveal from './SplitReveal'
 import Counter from './Counter'
 import Orbs from './Orbs'
+import ContributionGraph from './ContributionGraph'
 import { usePauseOffscreen } from '../lib/scroll'
 
 function StarIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.401 8.168L12 18.896l-7.335 3.869 1.401-8.168L.132 9.21l8.2-1.192z" />
     </svg>
   )
@@ -55,14 +56,14 @@ function RepoRow({ repo, index, inView }) {
       <span style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.75rem, 2vw, 1.75rem)', flexShrink: 0 }}>
         {repo.stargazers_count > 0 && (
           <span className="proj-muted proj-stars" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.75rem', fontFamily: 'var(--mono)', color: 'var(--text-muted)' }}>
-            <StarIcon />{repo.stargazers_count}
+            <StarIcon />{repo.stargazers_count}<span className="sr-only"> stars</span>
           </span>
         )}
         <span className="proj-muted proj-lang" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.72rem', fontFamily: 'var(--mono)', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
           <span style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0 }} />
           {repo.language || 'Code'}
         </span>
-        <svg className="proj-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg className="proj-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
           <path d="M7 17L17 7M17 7H7M17 7V17" />
         </svg>
       </span>
@@ -101,8 +102,8 @@ export default function Projects({ profile, repos, live }) {
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
           <p className="eyebrow">Repositories</p>
           {live && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.15em', fontFamily: 'var(--mono)', color: '#22c55e' }}>
-              <span className="pulse-dot" style={{ '--pulse-duration': '1.3s', '--pulse-min': 0.2, width: 6, height: 6, borderRadius: '50%', background: '#22c55e' }} />
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.15em', fontFamily: 'var(--mono)', color: 'var(--live)' }}>
+              <span className="pulse-dot" style={{ '--pulse-duration': '1.3s', '--pulse-min': 0.2, width: 6, height: 6, borderRadius: '50%', background: 'var(--live)' }} />
               LIVE FROM GITHUB
             </span>
           )}
@@ -118,7 +119,7 @@ export default function Projects({ profile, repos, live }) {
           transition={{ delay: 0.2 }}
           style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '3rem', maxWidth: '520px' }}
         >
-          Pulled live from <a href={GH_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', fontWeight: 600 }}>@{GH_USER}</a> — embedded systems, computer vision &amp; AI that survive contact with reality.
+          {live ? 'Pulled live from' : 'From'} <a href={GH_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', fontWeight: 600 }}>@{GH_USER}</a> — embedded systems, computer vision &amp; AI that survive contact with reality.
         </m.p>
 
         {/* GitHub stats band */}
@@ -146,6 +147,7 @@ export default function Projects({ profile, repos, live }) {
             <button
               data-cursor="More"
               onClick={() => setShowAll((v) => !v)}
+              aria-expanded={showAll}
               className="glass glass-hover"
               style={{
                 padding: '0.85rem 2.2rem', borderRadius: 100,
@@ -164,18 +166,7 @@ export default function Projects({ profile, repos, live }) {
           transition={{ duration: 0.6, delay: 0.4 }}
           style={{ marginTop: '4.5rem' }}
         >
-          <h3 className="eyebrow" style={{ color: 'var(--text-dim)', marginBottom: '1.25rem' }}>
-            Contribution activity
-          </h3>
-          <div className="glass" style={{ padding: 'clamp(1rem, 3vw, 2rem)', overflowX: 'auto' }}>
-            <img
-              src={`https://ghchart.rshah.org/2e6bff/${GH_USER}`}
-              alt={`${GH_USER}'s GitHub contribution graph`}
-              style={{ width: '100%', minWidth: 600, display: 'block' }}
-              loading="lazy"
-              onError={(e) => { e.currentTarget.parentElement.style.display = 'none' }}
-            />
-          </div>
+          <ContributionGraph />
         </m.div>
       </div>
 

@@ -8,7 +8,9 @@ export default function AnimationToggle() {
     <button
       onClick={toggleAnimations}
       data-cursor={animationsEnabled ? "Pause" : "Play"}
-      aria-label={animationsEnabled ? "Disable animations" : "Enable animations"}
+      aria-label="Animations"
+      aria-pressed={animationsEnabled}
+      title={animationsEnabled ? 'Pause animations' : 'Play animations'}
       style={{
         position: 'relative',
         width: 38,

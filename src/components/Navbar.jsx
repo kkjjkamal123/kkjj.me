@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import Magnetic from './Magnetic'
 import ThemeToggle from './ThemeToggle'
@@ -39,6 +39,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [active, setActive] = useState('')
+  const burgerRef = useRef(null)
+  const menuRef = useRef(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -81,7 +83,14 @@ export default function Navbar() {
   // otherwise it stays pinned over content the user has moved past.
   useEffect(() => {
     if (!menuOpen) return
-    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false) }
+    // Move focus into the menu so keyboard and screen-reader users land
+    // on its first item instead of staying on the hamburger behind it.
+    menuRef.current?.querySelector('a')?.focus({ preventScroll: true })
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return
+      setMenuOpen(false)
+      burgerRef.current?.focus()
+    }
     const onScroll = () => setMenuOpen(false)
     window.addEventListener('keydown', onKey)
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -91,9 +100,15 @@ export default function Navbar() {
     }
   }, [menuOpen])
 
-  const handleLink = (href) => {
+  // Real anchors (so links can be copied, opened in a new tab and read
+  // by crawlers), with the jump itself done here to apply the navbar
+  // offset and the reduced-motion preference.
+  const handleLink = (e, href) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return
+    e.preventDefault()
     setMenuOpen(false)
     scrollToId(href)
+    history.replaceState(null, '', href === '#hero' ? location.pathname + location.search : href)
   }
 
   return (
@@ -126,7 +141,10 @@ export default function Navbar() {
             justifyContent: 'space-between',
             padding: '0 0.6rem 0 1.4rem',
             gap: '1rem',
-            background: scrolled ? undefined : 'transparent',
+            // The glass tint alone (~4% white) lets headings and project rows
+            // read straight through the pill as they scroll under it — and
+            // where backdrop-filter is missing, nothing blurs them either.
+            background: scrolled ? 'var(--nav-bg)' : 'transparent',
             border: scrolled ? undefined : '1px solid transparent',
             borderRadius: scrolled ? 100 : 0,
             boxShadow: scrolled ? 'var(--shadow-2)' : 'none',
@@ -137,7 +155,7 @@ export default function Navbar() {
             <a
               href="#hero"
               data-cursor="Top"
-              onClick={(e) => { e.preventDefault(); handleLink('#hero') }}
+              onClick={(e) => handleLink(e, '#hero')}
               style={{ fontFamily: 'var(--display)', fontWeight: 600, fontSize: '1.05rem', letterSpacing: '-0.02em' }}
             >
               VSK<span style={{ color: 'var(--accent)' }}>.</span>
@@ -147,13 +165,15 @@ export default function Navbar() {
           {/* Desktop links */}
           <div style={{ display: 'flex', gap: '0.15rem', alignItems: 'center' }} className="nav-links">
             {links.map((l) => (
-              <button
+              <a
                 key={l.href}
+                href={l.href}
                 data-cursor="Go"
-                onClick={() => handleLink(l.href)}
-                aria-current={active === l.href ? 'true' : undefined}
+                onClick={(e) => handleLink(e, l.href)}
+                aria-current={active === l.href ? 'location' : undefined}
                 style={{
                   position: 'relative',
+                  display: 'inline-block',
                   padding: '0.5rem 0.85rem',
                   fontSize: '0.82rem',
                   fontWeight: 500,
@@ -171,7 +191,7 @@ export default function Navbar() {
                   />
                 )}
                 {l.label}
-              </button>
+              </a>
             ))}
           </div>
 
@@ -218,6 +238,7 @@ export default function Navbar() {
 
             {/* Hamburger */}
             <button
+              ref={burgerRef}
               className="hamburger"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -248,6 +269,9 @@ export default function Navbar() {
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="glass glass-strong"
             id="mobile-menu"
+            ref={menuRef}
+            role="navigation"
+            aria-label="Mobile"
             style={{
               // Near-opaque: at glass translucency the hero CTAs read through the menu items.
               background: 'var(--menu-bg)',
@@ -263,13 +287,15 @@ export default function Navbar() {
             }}
           >
             {links.map((l) => (
-              <button
+              <a
                 key={l.href}
-                onClick={() => handleLink(l.href)}
+                href={l.href}
+                onClick={(e) => handleLink(e, l.href)}
+                aria-current={active === l.href ? 'location' : undefined}
                 style={{ fontSize: '1.1rem', fontWeight: 500, color: 'var(--text)', textAlign: 'left' }}
               >
                 {l.label}
-              </button>
+              </a>
             ))}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
               <a

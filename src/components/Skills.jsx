@@ -17,12 +17,12 @@ const categories = [
   },
   {
     label: 'Embedded & Hardware',
-    skills: ['Raspberry Pi Series', 'Arduino Series', 'Jetson Series', 'KiCad', 'Flightcontrollers'],
+    skills: ['Raspberry Pi Series', 'Arduino Series', 'Jetson Series', 'KiCad', 'Flight Controllers'],
     dir: 'normal',
   },
   {
     label: 'Aerospace & Tools',
-    skills: ['Aerodynamics', 'Telemetry', 'Flight Dynamics', 'Git', 'Linux', 'OpenRocket', 'Solidworks', 'Ansys Fluent'],
+    skills: ['Aerodynamics', 'Telemetry', 'Flight Dynamics', 'Git', 'Linux', 'OpenRocket', 'SolidWorks', 'Ansys Fluent'],
     dir: 'reverse',
   },
 ]
@@ -57,7 +57,6 @@ function SkillRow({ cat, index, inView }) {
         {cat.skills.map((skill) => (
           <span
             key={skill}
-            data-cursor="loading"
             className="mega"
             style={{
               fontSize: 'clamp(1.4rem, 3vw, 2.2rem)',
