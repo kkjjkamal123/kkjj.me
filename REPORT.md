@@ -1,3 +1,6 @@
+> **Historical (June 2026).** This is the original build report. The design, fonts, rocket section and
+> GitHub chart have changed since. For the current state see `README.md` and `CHANGELOG.md`.
+
 # Project Report — kkjj.me Portfolio
 
 **Prepared:** 16 June 2026

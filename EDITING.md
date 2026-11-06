@@ -1,211 +1,162 @@
 # Editing Guide
 
-This guide shows you exactly where to edit your portfolio content. Each section corresponds to a file and the specific `const` to modify.
+Where to change every piece of content on the site. Each section names the file and the `const` (or the
+text to search for). Line numbers are left out on purpose because they drift. Search for the name instead.
 
 ---
 
-## Hero Section (`src/components/Hero.jsx`)
+## Hero (`src/components/Hero.jsx`)
 
-**Marquee role words** — Edit the `ROLES` array (line 8):
+**Marquee role words**: the `ROLES` array.
 ```js
 const ROLES = ['EMBEDDED SYSTEMS', 'COMPUTER VISION', 'ARTIFICIAL INTELLIGENCE', 'AEROSPACE', 'ROBOTICS']
 ```
 
-**Data strip stats** — Edit the `DATA_STRIP` array (line 10). Each entry has a `value` (number/text) and `label`:
+**Stats strip**: the `DATA_STRIP` array. Each entry has a `value` and a `label`:
 ```js
 const DATA_STRIP = [
-  { value: '43.6', label: 'FPS · Edge CV on RPi 5' },
-  { value: '0.982', label: 'mAP50 · YOLOv8n-OBB' },
-  // ... etc
+  { value: 'ECE', label: 'Undergrad · Chennai, India' },
+  { value: '05+', label: 'Disciplines · One builder' },
+  { value: '2006', label: 'Taking things apart since' },
+  { value: '2020', label: 'First commit' },
 ]
 ```
 
-**Tagline paragraph** — The main tagline is embedded in JSX around line 178. Search for "I build things that" and update the text, key words, and accent highlights directly in the component.
+**Metadata row** (the three small labels above the name): search for `Chennai, India`,
+`Looking for internships` and `ECE undergrad`.
 
-**EST. 2006 tag** — The year next to your name is hardcoded on line 159 as `EST. 2006`. Change the year here.
-
-**Metadata row labels** — Three lines of small text in the hero header (line 90–92):
-- `Portfolio / 2026` — left side
-- `Available for collaboration` — middle (always has an accent dot)
-- `IND · Earth · LEO-curious` — right side
+**Tagline**: search for `I build things that have to work outside the lab`.
 
 ---
 
-## Trajectory / Flight Log (`src/components/Trajectory.jsx`)
+## Timeline (`src/components/Trajectory.jsx`)
 
-**Timeline milestones** — Edit the `LOG` array (line 7). Add, remove, or update entries with `{year, title, detail}`:
-```js
-const LOG = [
-  { year: '2006', title: 'Established', detail: 'Came online...' },
-  { year: '2020', title: 'First commit', detail: 'Joined GitHub...' },
-  // Add your entries here
-]
-```
-
-This is **THE place** to add life milestones, project launches, and career highlights. The timeline renders newest at the bottom.
+The `LOG` array. Add, remove or update `{ year, title, detail }` entries. The newest goes at the bottom,
+and a `year` of `'NOW'` gets the highlighted node.
 
 ---
 
-## Featured Rocket Spotlight (`src/components/FeaturedRocket.jsx`)
+## Rocket spotlight (`src/components/FeaturedRocket.jsx`)
 
-**Project details** — Edit the `PROJECT` const at the top (line 8). All fields are clearly commented:
+The `PROJECT` object at the top:
 ```js
 const PROJECT = {
-  codename: 'Project Apex',                    // Your rocket's name
-  tagline: 'Designing, building, and...',      // One-liner pitch
-  description: 'A hands-on aerospace build...', // Full description (shows in card)
-  focus: [
-    { title: 'Rocket Building', detail: '...', icon: 'build' },
-    { title: 'Aerodynamics', detail: '...', icon: 'aero' },
-    { title: 'Telemetry', detail: '...', icon: 'telem' },
-  ],
-  status: 'In Development',                    // Status badge
+  codename: 'Model Rocket V1',  // first word plain, the rest in the accent colour
+  tagline: '…',
+  description: '…',
+  focus: [ { title, detail, icon: 'build' | 'aero' | 'telem' }, … ],
+  status: 'In progress',
   links: {
-    demo: '',                                  // YouTube or build-log URL (optional)
-    repo: 'https://github.com/...',            // GitHub repo link
-    follow: 'https://github.com/...',          // Fallback CTA (always shown)
+    demo: '',     // YouTube / build-log URL: adds a "Watch the build" button
+    repo: 'https://github.com/kkjjkamal123/Model-Rocket-V1',
+    follow: 'https://github.com/kkjjkamal123',  // fallback CTA
   },
 }
 ```
 
----
-
-## About Section (`src/components/About.jsx`)
-
-**Bio paragraphs** — Two paragraphs of text around lines 74–84. Search for:
-- `I'm Kamalesh VS — a builder working where...` (first paragraph, line 75–76)
-- `My work spans real-time road-anomaly...` (second paragraph, line 79–83)
-
-Stats (public repos, years building, stars) are **auto-pulled from GitHub** — no manual entry needed.
+The line drawing beside it is `src/components/RocketBlueprint.jsx`. The callout labels are in
+`CALLOUTS`, and the drawing deliberately carries no dimensions.
 
 ---
 
-## Skills Section (`src/components/Skills.jsx`)
+## About (`src/components/About.jsx`)
 
-**Skill categories and items** — Edit the `categories` array (line 6). Each entry has a `label` and `skills` array:
-```js
-const categories = [
-  {
-    label: 'Languages & Web',
-    skills: ['Python', 'C++', 'JavaScript', 'HTML / CSS'],
-    dir: 'normal',
-  },
-  {
-    label: 'AI & Computer Vision',
-    skills: ['YOLOv8', 'OpenCV', 'PyTorch', ...],
-    dir: 'reverse',  // alternate direction for visual flow
-  },
-  // ... more categories
-]
-```
-
-Add, remove, or reorder categories and skills as needed. The `dir: 'normal'` or `'reverse'` controls marquee scroll direction.
+Bio paragraphs: search for `I&apos;m Kamalesh`. Public repos, years building and stars come from
+GitHub automatically.
 
 ---
 
-## Contact Links (`src/components/Contact.jsx`)
+## Skills (`src/components/Skills.jsx`)
 
-**Social media** — Edit the `socials` array (line 6). Each entry is a social link with `name`, `handle`, `url`, and an SVG `icon`:
-```js
-const socials = [
-  {
-    name: 'GitHub',
-    handle: '@kkjjkamal123',
-    url: 'https://github.com/kkjjkamal123',
-    icon: <svg>...</svg>,
-  },
-  // ... more socials
-]
-```
+The `categories` array. Each entry has a `label`, a `skills` list, and `dir: 'normal' | 'reverse'` for
+the marquee direction.
 
-Update the `name`, `handle`, `url` for your accounts. You can also add new social links following the same pattern (find an SVG icon and paste it in).
+---
+
+## Contact (`src/components/Contact.jsx`)
+
+The `socials` array: `{ name, handle, url, icon }`. The email button uses the entry named `Email`.
+The navbar has its own GitHub/LinkedIn icons in `SOCIALS` in `src/components/Navbar.jsx`, and the mobile
+menu repeats the links further down that file.
 
 ---
 
 ## Footer (`src/components/Footer.jsx`)
 
-**Multilingual marquee** — Edit the `PHRASES` array (line 4) to customize the bottom scrolling tagline:
-```js
-const PHRASES = [
-  "LET'S CREATE SOMETHING AWESOME",  // English
-  "让我们创造伟大的事物",             // Chinese
-  "CONSTRUISONS QUELQUE CHOSE DE GRAND", // French
-  // ... add or replace phrases
-]
-```
-
-Each phrase scrolls in an infinite loop. Keep them short (one line) for best layout.
+The `PHRASES` array drives the multilingual marquee. Keep each phrase to one line.
 
 ---
 
-## GitHub Integration (`src/lib/github.js`)
+## GitHub data (`src/lib/github.js`)
 
-**GitHub username** — Line 3: `export const GH_USER = 'kkjjkamal123'`
+| Const | What it does |
+|---|---|
+| `GH_USER` | Whose profile and repos are shown |
+| `PINNED_REPOS` | Repos that always lead the list, in this order |
+| `HIDDEN_REPOS` | Repos never shown, whatever the API returns |
+| `DESCRIPTION_OVERRIDES` | Text shown instead of a repo's GitHub description. Use it when the description on GitHub is out of date, and delete the entry once GitHub is fixed |
+| `FALLBACK_PROFILE`, `FALLBACK_REPOS` | Snapshot used when the API is unreachable or rate-limited |
+| `LANG_COLORS` | Language dot colours |
 
-Change this to pull your repos, stats, and profile live from GitHub.
-
-**Fallback data** — Lines 23–32 (FALLBACK_PROFILE) and 34+ (FALLBACK_REPOS) store snapshot data in case GitHub API is unreachable. Update these if you want a custom offline fallback (most users keep them as-is).
-
-**Language colors** — Lines 7–19 (LANG_COLORS) map programming languages to brand colors. Edit if you want custom repo badge colors.
-
----
-
-## Design Tokens (`src/index.css`)
-
-**Accent color tokens** — In the `:root` block (lines 10–39), the portfolio is themed around electric cobalt blue. To change accents:
-- `--accent: #4d84ff` — primary accent color
-- `--accent-fill: #2e6bff` — button/highlight fill
-- `--accent-glow: rgba(46, 107, 255, 0.22)` — glow/shadow color
-- `--accent-dim: rgba(77, 132, 255, 0.1)` — dimmed overlay
-- `--grid-line: rgba(77, 132, 255, 0.07)` — blueprint grid
-- `--watermark-stroke: rgba(122, 158, 255, 0.13)` — section numerals + watermarks
-
-Update these six values to match your brand. Then **repeat them in the `[data-theme="light"]` block** (lines 41–65) with light-theme versions.
-
-**Font families** — Line 26–27:
-- `--display: 'Anton', 'Arial Narrow', sans-serif` — giant headings (Google Fonts, already loaded)
-- `--body: 'General Sans', 'Inter', system-ui, sans-serif` — body text (Fontshare, already loaded)
-- `--mono: ui-monospace, 'SF Mono', ...` — system monospace (no change needed)
-
-Font files are loaded from `<link>` tags in `index.html`. Swap the @import URLs there if you want different fonts.
+To refresh the snapshot, save `https://api.github.com/users/kkjjkamal123/repos?per_page=100` and copy
+the non-fork entries across. Keep the same fields.
 
 ---
 
-## Page Meta (`index.html`)
+## Design tokens (`src/index.css`)
 
-**Page title** — Inside `<head>`, change the `<title>` tag.
+The `:root` block (dark) and the `[data-theme="light"]` block hold every colour. Change both:
+- `--accent`, `--accent-fill`, `--accent-glow`, `--accent-dim`: the cobalt accent
+- `--grid-line`, `--watermark-stroke`: blueprint grid and outlined watermark
+- `--live`, `--warn`: the "LIVE" badge and the rocket's status chip (darker in light mode for contrast)
+- `--heat-0` … `--heat-4`: contribution heatmap levels
 
-**Meta description** — Change the `content` attribute of `<meta name="description">`.
-
-**Open Graph tags** — Update `og:title`, `og:description`, `og:image`, `og:url` for social sharing.
-
-**Theme color** — Change `<meta name="theme-color">` to match your accent color (mobile browser bar).
+Fonts are self-hosted: the `@font-face` rules at the top of `index.css` point at `public/fonts/`. The
+two faces needed above the fold are preloaded in `index.html`. To swap a font, replace the `.woff2` files
+and update both places.
 
 ---
 
-## Quick Reference
+## Page meta (`index.html`)
 
-| What | File | Const/Location |
+Title, description, Open Graph/Twitter tags, canonical URL, the JSON-LD `Person` block and the theme
+colour. If you edit the small inline theme script, nothing else needs to change: the build recomputes
+its CSP hash.
+
+---
+
+## Adding a third-party request
+
+The production page has a Content-Security-Policy. If you fetch from or load images from a new origin,
+add it to `CSP_DIRECTIVES` in `vite.config.js` (`connect-src` for `fetch`, `img-src` for images).
+Otherwise the browser blocks it in production only, because the dev server runs without the policy.
+`npm test` checks that the GitHub and contribution APIs are listed.
+
+---
+
+## Quick reference
+
+| What | File | Const / search |
 |------|------|---|
-| Hero marquee words | `Hero.jsx` | `ROLES` (line 8) |
-| Hero stats strip | `Hero.jsx` | `DATA_STRIP` (line 10) |
-| Timeline milestones | `Trajectory.jsx` | `LOG` (line 7) |
-| Rocket project details | `FeaturedRocket.jsx` | `PROJECT` (line 8) |
-| Bio paragraphs | `About.jsx` | Lines 75–83 |
-| Skill categories | `Skills.jsx` | `categories` (line 6) |
-| Social links | `Contact.jsx` | `socials` (line 6) |
-| Footer taglines | `Footer.jsx` | `PHRASES` (line 4) |
-| GitHub username | `github.js` | `GH_USER` (line 3) |
-| Accent color | `index.css` | `:root` & `[data-theme="light"]` |
+| Hero marquee words | `Hero.jsx` | `ROLES` |
+| Hero stats strip | `Hero.jsx` | `DATA_STRIP` |
+| Timeline | `Trajectory.jsx` | `LOG` |
+| Rocket details | `FeaturedRocket.jsx` | `PROJECT` |
+| Bio | `About.jsx` | `I&apos;m Kamalesh` |
+| Skills | `Skills.jsx` | `categories` |
+| Social links | `Contact.jsx`, `Navbar.jsx` | `socials`, `SOCIALS` |
+| Footer phrases | `Footer.jsx` | `PHRASES` |
+| GitHub user, pins, overrides | `github.js` | `GH_USER`, `PINNED_REPOS`, `DESCRIPTION_OVERRIDES` |
+| Colours | `index.css` | `:root`, `[data-theme="light"]` |
+| Allowed origins | `vite.config.js` | `CSP_DIRECTIVES` |
 
 ---
 
 ## Workflow
 
-1. **Edit** one of the above files in your code editor.
-2. **Preview** locally: `npm run dev` → http://localhost:5173
-3. **Check** for typos, formatting, and visual alignment.
-4. **Lint & build**: `npm run lint && npm run build`
-5. **Push** to GitHub — the site auto-deploys via Actions.
-
-If anything looks broken, open the browser DevTools (F12) and check the Console for errors.
+1. **Edit** one of the files above.
+2. **Preview**: `npm run dev` → http://localhost:5173
+3. **Check**: `npm run check` (lint, tests, production build).
+4. **Look at the production build**: `npm run preview`. This runs with the real CSP, so blocked requests
+   show up in the browser console here and not in `dev`.
+5. **Push** to `main` (see `PUSH.txt`). GitHub Actions lints, tests, builds and deploys.

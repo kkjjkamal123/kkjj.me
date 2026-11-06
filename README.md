@@ -1,53 +1,51 @@
 # kkjj.me
 
 A fast, dark developer portfolio for Kamalesh VS, inspired by [landonorris.com](https://www.landonorris.com).
-Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub integration**, an animated
-**rocket project spotlight**, and a **landonorris-style editorial design** with giant Anton headings and electric cobalt blue accents.
+Built with **React + Vite** and **Framer Motion**, with a live **GitHub integration**, a **Model Rocket V1**
+spotlight and an editorial design: giant Anton headings, glass panels and electric cobalt accents.
 
-> Live preview locally: `npm run dev` → http://localhost:5173
- For the site check out https://kkjj.me
+> Live site: https://kkjj.me · Local preview: `npm run dev` → http://localhost:5173
 
 ---
 
 ## ✨ Features
 
-- **Custom cursor** — a spring-driven dot + ring that morphs into a contextual label (`View`, `Open`, `Email`...)
-  over interactive elements, via `data-cursor` attributes. Disabled automatically on touch devices.
-- **Buttery smooth scroll** powered by [Lenis](https://github.com/darkroomengineering/lenis).
-- **Preloader** with a live percentage counter that wipes away into the page on first load.
-- **Kinetic typography** — per-word mask reveals (`RevealText`) and a hover scramble effect (`ScrambleText`)
-  on key headlines, set in **Anton** (giant condensed uppercase) with electric cobalt accents.
-- **Magnetic buttons & links** that pull toward the cursor within range, and **3D tilt** on project/telemetry
-  cards that tracks pointer position.
-- **Marquee tickers** for the hero role strip, the skills toolkit (alternating directions per row), and the footer CTA.
-- **Film-grain overlay** + a top scroll-progress bar + a scroll-spy nav pill that slides between active sections.
-- **Centered mission-control hero** — blueprint grid background + HUD corner brackets + parallax "BUILD" outlined watermark easter egg (drifts with cursor), with EST. 2006 year tag.
-- **TRAJECTORY flight-log** — an interactive timeline of milestones from 2006 to NOW, with year, title, and detail per entry.
-- **Editorial layout** — oversized faded section numerals, asymmetric grids, watermark headlines, and an
-  indexed project table (numbered rows with Anton titles, language tags, electric cobalt hover fills).
-- **Animated rocket spotlight** — SVG rocket with electric cobalt flame, a twinkling starfield, focus-area
-  cards, and a looping **telemetry preview panel** (clearly tagged `PREVIEW` — illustrative, not real flight data).
-- **F1-style data strip** — hero metadata row displaying key stats (FPS, mAP50, disciplines, year) in monospace, with mission-control HUD styling.
-- **Live GitHub integration** — pulls your real profile + repos from the GitHub API on load, with your data
-  baked in as a fallback so it never breaks or rate-limits. Shows a stats strip with count-up numbers,
-  language-coloured repo cards, star counts, a "LIVE" badge, and your contribution graph.
-- **Fully responsive** with a frosted, pill-shaped navbar and a mobile hamburger menu.
-- **SEO + social ready** — Open Graph / Twitter meta tags, SVG favicon, theme color.
-- **Zero CSS framework** — design tokens live in CSS variables; components are styled inline.
+- **Mission-control hero**: blueprint grid, HUD corner brackets, a parallax "BUILD" watermark that drifts
+  against the cursor, a stats strip and a role marquee.
+- **Preloader** with a percentage counter, shown once per browser session. The page is revealed as its
+  curtain lifts.
+- **Kinetic typography**: per-word (`RevealText`) and per-character (`SplitReveal`) mask reveals.
+- **Magnetic buttons**, **3D tilt** on cards, **marquee tickers**, a scroll-progress bar and a scroll-spy
+  nav pill.
+- **Trajectory timeline** with a scroll-linked rail that fills as you read down it.
+- **Model Rocket V1 spotlight** with an animated side-elevation line drawing (nose cone, recovery,
+  avionics, motor mount, three fins, CG/CP).
+- **Live GitHub integration**: profile and repos from the GitHub API, cached for the session, with a
+  baked-in snapshot as fallback so it never renders empty. A green "LIVE" badge only shows for live data.
+- **Contribution heatmap** drawn natively in the site's palette for both themes.
+- **Light and dark themes** (follows the OS until you pick one, no flash on load) and an **animation
+  toggle** that respects `prefers-reduced-motion`.
+- **Accessible**: skip link, real anchors in the nav, focus management in the mobile menu, screen-reader
+  text for animated headings, WCAG AA contrast for small text in both themes.
+- **Hardened**: a Content-Security-Policy is injected at build time (inline script allowed by hash),
+  plus security headers on Vercel. Storage access never throws, so blocked cookies can't blank the page.
+- **SEO**: Open Graph / Twitter meta, JSON-LD `Person`, canonical URL, `robots.txt`, `sitemap.xml` and a
+  real 404 page.
 
 ---
 
 ## 🧱 Tech stack
 
-| Layer         | Choice                          |
-|---------------|---------------------------------|
-| Framework     | React 18                                          |
-| Build tool    | Vite 8                                            |
-| Animation     | Framer Motion                                     |
-| Smooth scroll | Lenis                                             |
-| Fonts         | Anton (Google Fonts, giant headings), General Sans (Fontshare, body), system monospace (data/labels) |
-| Data          | GitHub REST API (live, no key)                    |
-| Contrib graph | ghchart.rshah.org                                 |
+| Layer         | Choice |
+|---------------|--------|
+| Framework     | React 18 |
+| Build tool    | Vite 8 (Rolldown) |
+| Animation     | Framer Motion (`LazyMotion`, features loaded in a separate chunk) |
+| Scrolling     | Native browser scrolling (no smooth-scroll library) |
+| Fonts         | Anton (headings) and General Sans (body), **self-hosted** in `public/fonts`; system monospace for labels |
+| Data          | GitHub REST API (live, no key) |
+| Contributions | `github-contributions-api.jogruber.de` (public proxy of the GitHub calendar) |
+| Tests         | Vitest |
 
 ---
 
@@ -55,53 +53,63 @@ Built with **React + Vite** and **Framer Motion**, featuring a live **GitHub int
 
 ```bash
 npm install      # install dependencies
-npm run dev      # start dev server at http://localhost:5173
+npm run dev      # dev server at http://localhost:5173
+npm run lint     # ESLint, zero warnings allowed
+npm test         # unit tests (Vitest)
 npm run build    # production build → dist/
-npm run preview  # preview the production build locally
+npm run preview  # serve the production build at http://localhost:5173
+npm run check    # lint + test + build, the same gate CI runs
 ```
 
-> Requires Node 18+. The current Vite 8 / React plugin combo is what the repo ships with now.
+> Requires Node 20.19+ or 22.12+ (Vite 8's minimum). CI uses Node 24.
 
 ---
 
 ## 📁 Project structure
 
 ```
-kkjj-me/
+mysite/
 ├── public/
-│   └── favicon.svg            # rocket favicon
+│   ├── CV.pdf, favicon.svg, CNAME
+│   ├── fonts/                     # self-hosted Anton + General Sans (woff2)
+│   ├── 404.html                   # static not-found page
+│   └── robots.txt, sitemap.xml
 ├── src/
 │   ├── lib/
-│   │   └── github.js          # live GitHub fetch hook + fallback data + helpers
+│   │   ├── github.js              # live GitHub hook, fallback snapshot, ranking, description overrides
+│   │   ├── scroll.js              # scrollToId, parallax, pause-offscreen helpers
+│   │   ├── storage.js             # localStorage/sessionStorage that never throws
+│   │   └── motion-features.js     # Framer Motion features, lazy-loaded
 │   ├── components/
-│   │   ├── Navbar.jsx         # floating pill nav, scroll-spy active link, mobile menu
-│   │   ├── Hero.jsx           # kinetic intro, cursor-reactive glow, role marquee
-│   │   ├── FeaturedRocket.jsx # animated rocket + telemetry spotlight
-│   │   ├── About.jsx          # bio + live count-up stats
-│   │   ├── Projects.jsx       # live GitHub repos + stats + contribution graph
-│   │   ├── Skills.jsx         # alternating marquee skill rows
-│   │   ├── Contact.jsx        # contact + social links
-│   │   ├── Footer.jsx
-│   │   ├── Cursor.jsx         # custom dot + label cursor
-│   │   ├── SmoothScroll.jsx   # Lenis wrapper
-│   │   ├── Noise.jsx          # film-grain overlay
-│   │   ├── Preloader.jsx      # intro percentage counter
-│   │   ├── ScrollProgress.jsx # top scroll progress bar
-│   │   ├── Magnetic.jsx       # cursor-pull wrapper for buttons/links
-│   │   ├── Tilt.jsx           # 3D pointer-tracking tilt wrapper
-│   │   ├── Marquee.jsx        # infinite horizontal scroll band
-│   │   ├── RevealText.jsx     # per-word mask reveal
-│   │   ├── ScrambleText.jsx   # hover glyph-scramble text
-│   │   └── Counter.jsx        # count-up number on scroll into view
-│   ├── App.jsx                # composes sections, fetches GitHub once
-│   ├── index.css             # design tokens (CSS variables) + resets
+│   │   ├── Navbar.jsx             # pill nav, scroll-spy, theme/animation toggles, mobile menu
+│   │   ├── Hero.jsx               # name, tagline, CTAs, stats strip, role marquee
+│   │   ├── About.jsx              # bio + bento grid of live stats
+│   │   ├── Trajectory.jsx         # timeline (LOG array)
+│   │   ├── FeaturedRocket.jsx     # rocket spotlight (PROJECT object)
+│   │   ├── RocketBlueprint.jsx    # animated rocket line drawing
+│   │   ├── Projects.jsx           # repo index + GitHub stats
+│   │   ├── ContributionGraph.jsx  # contribution heatmap
+│   │   ├── Skills.jsx             # skill marquees (categories array)
+│   │   ├── Contact.jsx            # email CTA + social links
+│   │   ├── Footer.jsx             # multilingual marquee + credits
+│   │   ├── Preloader.jsx, Cursor.jsx, ScrollProgress.jsx
+│   │   ├── ThemeToggle.jsx, AnimationToggle.jsx, AnimationContext.jsx
+│   │   └── Magnetic.jsx, Tilt.jsx, Marquee.jsx, Orbs.jsx, Counter.jsx, RevealText.jsx, SplitReveal.jsx
+│   ├── App.jsx                    # composes sections, fetches GitHub once
+│   ├── index.css                  # design tokens (CSS variables), glass system, shared classes
 │   └── main.jsx
-├── .github/workflows/deploy.yml  # GitHub Pages CI
-├── vercel.json                   # Vercel config
-├── vite.config.js
-├── REPORT.md                  # full project report
-└── DEPLOY.md                  # deployment guide
+├── tests/site.test.js             # Vitest suite
+├── .github/workflows/deploy.yml   # GitHub Pages CI (lint → test → build → deploy)
+├── vercel.json                    # Vercel config + security headers
+├── vite.config.js                 # build config + CSP injection
+├── CHANGELOG.md
+├── EDITING.md                     # where to change every piece of content
+├── DEPLOY.md                      # deployment guide
+└── PUSH.txt                       # how to push a new version
 ```
+
+`Figure.jsx`, `ScrambleText.jsx`, `ParticleWave.jsx` and `ShapeParticles.jsx` are kept for later use but
+aren't imported, so they don't end up in the bundle.
 
 ---
 
@@ -109,29 +117,25 @@ kkjj-me/
 
 | What | Where |
 |------|-------|
-| **Rocket name, tagline, focus areas, demo/repo links** | `PROJECT` object at the top of `src/components/FeaturedRocket.jsx` |
+| **Rocket name, tagline, focus areas, links** | `PROJECT` in `src/components/FeaturedRocket.jsx` |
+| **Timeline** | `LOG` in `src/components/Trajectory.jsx` |
 | **GitHub username** | `GH_USER` in `src/lib/github.js` |
-| **Accent colour** | Electric cobalt blue (#2e6bff family) in `src/index.css` `:root` and `[data-theme="light"]` blocks; background is deep space-blue black (#06080f) with light neutral (#f3f5fa) in light theme |
-| **Bio / About copy** | `src/components/About.jsx` |
-| **Skills** | `categories` array in `src/components/Skills.jsx` |
-| **Contact links** | `socials` array in `src/components/Contact.jsx` |
+| **Pinned / hidden repos, description overrides** | `PINNED_REPOS`, `HIDDEN_REPOS`, `DESCRIPTION_OVERRIDES` in `src/lib/github.js` |
+| **Accent colour and theme** | `:root` and `[data-theme="light"]` in `src/index.css` |
+| **Bio** | `src/components/About.jsx` |
+| **Skills** | `categories` in `src/components/Skills.jsx` |
+| **Contact links** | `socials` in `src/components/Contact.jsx` |
 | **Page title / meta** | `index.html` |
+| **Allowed third-party origins (CSP)** | `CSP_DIRECTIVES` in `vite.config.js` |
 
----
-
-## ✏️ Content Editing
-
-For a complete guide on editing all portfolio content (hero, timeline, skills, contact, etc.) with exact const names and locations, see **[EDITING.md](./EDITING.md)**.
+Full details: **[EDITING.md](./EDITING.md)**.
 
 ---
 
 ## 📦 Deployment
 
-See **[DEPLOY.md](./DEPLOY.md)** for full instructions. Short version:
-
-- **GitHub Pages** — push to `main`; the included workflow builds and deploys automatically.
-- **Custom domain** — `kkjj.me` is registered with Namecheap and pointed at GitHub Pages.
-- **Vercel** — still works as a fallback if you want to import the repo there later.
+See **[DEPLOY.md](./DEPLOY.md)**. Short version: pushing to `main` runs the GitHub Actions workflow,
+which lints, tests, builds and publishes to GitHub Pages at `kkjj.me`. Vercel works as a fallback.
 
 ---
 

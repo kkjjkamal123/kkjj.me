@@ -1,3 +1,7 @@
+> **Historical (June 2026).** This describes the first hand-over and is kept for the record. Much of it
+> is out of date: the fonts, the rocket name, the telemetry panel and the push steps. For the current state
+> see `README.md`, `CHANGELOG.md` and `PUSH.txt`.
+
 # Portfolio — Status & Handover Report
 
 **Date:** 16 June 2026

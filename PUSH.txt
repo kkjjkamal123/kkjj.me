@@ -1,49 +1,61 @@
-HOW TO PUSH THIS PORTFOLIO TO GITHUB
+HOW TO PUBLISH THIS VERSION (v1.0.0)
 ====================================
 
-This repo already has one clean commit. You only need to run it from a machine/account
-that can authenticate as your GitHub user.
+Nothing has been pushed or deployed from this machine. The work is committed
+locally. Push it yourself when you're happy with it.
 
-WHY IT WASN'T PUSHED AUTOMATICALLY:
-The machine it was built on has an SSH key for another account. A GitHub SSH key can
-belong to only one account, so use the key that belongs to your GitHub user.
-
-------------------------------------------------------------
-STEP 1 - Create the repo on GitHub (skip if it already exists)
-------------------------------------------------------------
-Sign in to GitHub and go to:  https://github.com/new
-  - Repository name : your choice
-  - Visibility      : Public
-  - Do NOT add a README / .gitignore / license (this repo already has them)
+The repo already points at GitHub:
+    origin  https://github.com/kkjjkamal123/kkjj.me.git
 
 ------------------------------------------------------------
-STEP 2 - Point this repo at it and push
+STEP 1 - Check it locally
 ------------------------------------------------------------
-Open a terminal in this folder, then (SSH):
-
-    git remote add origin git@github.com:YOUR_USERNAME/YOUR_REPO.git
-    git push -u origin main
-
-Or over HTTPS with a personal access token:
-
-    git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-    git push -u origin main
-    # username: YOUR_USERNAME   password: <your personal access token>
+    npm ci
+    npm run check      # lint + tests + production build
+    npm run preview    # open http://localhost:5173 and look around
 
 ------------------------------------------------------------
-STEP 3 - Turn on GitHub Pages
+STEP 2 - Review what's new
 ------------------------------------------------------------
+    git log --oneline origin/main..main
+    cat CHANGELOG.md
+
+The new commits end with a "Co-Authored-By: Claude" trailer. Earlier
+commits in this repo have a single author. If you want to keep it that
+way, strip the trailer before you push:
+
+    git rebase origin/main --exec \
+      'git commit --amend --no-edit -m "$(git log -1 --format=%B | grep -v "^Co-Authored-By:")"'
+
+------------------------------------------------------------
+STEP 3 - Push
+------------------------------------------------------------
+Use credentials for the kkjjkamal123 account. A GitHub SSH key belongs to
+exactly one account, so on a machine whose key belongs to someone else,
+use HTTPS with a personal access token:
+
+    git push origin main
+    # HTTPS username: kkjjkamal123   password: <personal access token>
+
+------------------------------------------------------------
+STEP 4 - It deploys itself
+------------------------------------------------------------
+The push starts .github/workflows/deploy.yml, which lints, tests, builds
+and publishes to GitHub Pages at https://kkjj.me/. Follow it under the
+repo's Actions tab. If Pages isn't enabled yet:
 Repo -> Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
 
-The included workflow (.github/workflows/deploy.yml) builds and publishes on every
-push to main.  Live URL:   https://kkjj.me/
-
-IMPORTANT - for the custom domain, keep VITE_BASE: /
-  - Custom domain (kkjj.me) -> keep VITE_BASE: /
-  - Other GitHub Pages setups -> edit .github/workflows/deploy.yml accordingly
+Keep VITE_BASE: / in the workflow (custom domain).
 
 ------------------------------------------------------------
-EASIEST ALTERNATIVE - Vercel (no base-path juggling)
+ALTERNATIVE - Vercel
 ------------------------------------------------------------
-Import the repo at  https://vercel.com/new  -> it auto-detects Vite -> Deploy.
-Serves from "/", so no VITE_BASE change is needed.  See DEPLOY.md for more.
+Import the repo at https://vercel.com/new. It picks up vercel.json (build
+command, output folder, security and cache headers). See DEPLOY.md.
+
+------------------------------------------------------------
+OPTIONAL - after pushing
+------------------------------------------------------------
+- Update MDView's description on GitHub to mention macOS. The site
+  overrides it for now (DESCRIPTION_OVERRIDES in src/lib/github.js).
+  Delete the override once GitHub is fixed.

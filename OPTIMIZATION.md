@@ -1,5 +1,9 @@
 # Performance Optimization Guide
 
+> Sections 1–6 are a running history. Some of what they describe was removed later: the `Noise.jsx`
+> grain overlay, Lenis smooth scrolling (the site uses native scrolling now) and `content-visibility` on
+> sections (it made anchor jumps land short). Section 7 is current.
+
 This document outlines the performance optimizations applied to the `kkjj.me` portfolio website to ensure a buttery-smooth 60fps experience, particularly on mobile devices and during complex animations.
 
 ## 1. Cursor Performance (`Cursor.jsx`)
@@ -43,3 +47,21 @@ By offloading continuous updates (cursor movement, scroll progress, full-screen 
 **Cursor Pointer Events**: Rewired `Cursor.jsx` to use passive `pointer` events (captures both mouse and pen input) instead of `mousemove` listeners tied to Framer Motion callbacks. Single composited GPU transform; zero React re-renders on movement. **Result**: 60 FPS stable on low-end devices during rapid cursor movement.
 
 **Verified on**: Desktop (1080p, 4K), mobile (375px, 768px), light/dark themes, lint clean, production build tested.
+
+## 7. v1.0.0 (November 2026)
+
+**LCP.** On a first visit the page used to be revealed only after the preloader's 0.7 s exit wipe had
+finished, and the largest element on screen, the outlined "BUILD" watermark, then took a further 1.6 s to
+fade in. The page is now revealed as the wipe starts, and the watermark fades in 0.9 s. Measured on a
+local production build in headless Chromium at 1440×900: LCP 2.7 s → 2.0 s on a first visit, 1.8 s →
+1.0 s on a repeat visit (no preloader). CLS stays under 0.04.
+
+**Caching.** On Vercel, the content-hashed `/assets/*` files are served `immutable` for a year and fonts
+for 30 days. The default would make the browser revalidate every file on every visit.
+
+**Bundle.** About 49 kB gzipped for the app, 45 kB for React (a separate long-cached chunk) and 22 kB for
+the Framer Motion features, loaded in parallel through `LazyMotion`. Unused components (`ParticleWave`,
+`ShapeParticles`, `ScrambleText`, `Figure`) aren't imported, so they're tree-shaken out.
+
+**Contribution graph.** The third-party PNG became a native CSS-grid heatmap. Its data is fetched only
+when the section is within 600 px of the viewport, and it's cached for the session.
