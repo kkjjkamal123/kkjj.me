@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { getItem, setItem } from './storage'
 
 export const GH_USER = 'kkjjkamal123'
 export const GH_URL = `https://github.com/${GH_USER}`
@@ -22,7 +23,7 @@ export const LANG_COLORS = {
   Swift: '#F05138',
 }
 
-// Real data (snapshot of the GitHub API, Oct 2026) — used as a fallback so the site
+// Real data (snapshot of the GitHub API, 5 Nov 2026; forks left out) — used as a fallback so the site
 // never looks empty if the live API is unreachable or rate-limited.
 export const FALLBACK_PROFILE = {
   login: GH_USER,
@@ -30,20 +31,50 @@ export const FALLBACK_PROFILE = {
   avatar_url: 'https://avatars.githubusercontent.com/u/76260512?v=4',
   html_url: GH_URL,
   public_repos: 31,
-  followers: 24,
-  following: 21,
+  followers: 22,
+  following: 22,
   created_at: '2020-12-19T17:19:37Z',
 }
 
 export const FALLBACK_REPOS = [
   {
+    "name": "ENTITY-WEB",
+    "description": "Project site for ENTITY - an optimized on-device LLM runtime for Arm Android phones. Animated explainers, live device leaderboard, evidence record.",
+    "language": "Astro",
+    "stargazers_count": 0,
+    "html_url": "https://github.com/kkjjkamal123/ENTITY-WEB",
+    "homepage": "https://kkjjkamal123.github.io/ENTITY-WEB/",
+    "updated_at": "2026-11-04T10:57:07Z",
+    "fork": false
+  },
+  {
+    "name": "kkjj.me",
+    "description": "",
+    "language": "JavaScript",
+    "stargazers_count": 0,
+    "html_url": "https://github.com/kkjjkamal123/kkjj.me",
+    "homepage": "",
+    "updated_at": "2026-10-29T12:47:59Z",
+    "fork": false
+  },
+  {
+    "name": "MDView",
+    "description": "A fast, offline desktop Markdown reader with full LaTeX, Mermaid and GitHub-flavoured rendering. Windows and Linux.",
+    "language": null,
+    "stargazers_count": 1,
+    "html_url": "https://github.com/kkjjkamal123/MDView",
+    "homepage": "",
+    "updated_at": "2026-10-29T08:09:13Z",
+    "fork": false
+  },
+  {
     "name": "Ultstat",
-    "description": "Menu-bar system monitor and battery charge limiter for Apple silicon Macs: CPU, GPU, memory, temps, power, processes, plus charge limit, sailing and calibration. 0.85 ms/s idle CPU. Swift, macOS 26+.",
+    "description": "Menu-bar system monitor + battery charge limiter for Apple silicon Macs (macOS 26+). 0.85 ms/s idle CPU, ~67x less than Stats.",
     "language": "Swift",
     "stargazers_count": 0,
     "html_url": "https://github.com/kkjjkamal123/Ultstat",
     "homepage": "",
-    "updated_at": "2026-10-12T13:35:00Z",
+    "updated_at": "2026-10-12T13:46:06Z",
     "fork": false
   },
   {
@@ -53,7 +84,7 @@ export const FALLBACK_REPOS = [
     "stargazers_count": 0,
     "html_url": "https://github.com/kkjjkamal123/Agentic-OS",
     "homepage": "",
-    "updated_at": "2026-10-12T03:10:00Z",
+    "updated_at": "2026-10-11T21:39:33Z",
     "fork": false
   },
   {
@@ -63,17 +94,17 @@ export const FALLBACK_REPOS = [
     "stargazers_count": 0,
     "html_url": "https://github.com/kkjjkamal123/Vox",
     "homepage": "",
-    "updated_at": "2026-10-11T21:04:47Z",
+    "updated_at": "2026-10-11T21:11:56Z",
     "fork": false
   },
   {
-    "name": "ENTITY-WEB",
-    "description": "Project site for ENTITY - an optimized on-device LLM runtime for Arm Android phones. Animated explainers, live device leaderboard, evidence record.",
-    "language": "Astro",
+    "name": "Schneider-Electric---yuva-yodha-tech",
+    "description": "",
+    "language": "Python",
     "stargazers_count": 0,
-    "html_url": "https://github.com/kkjjkamal123/ENTITY-WEB",
-    "homepage": "https://kkjjkamal123.github.io/ENTITY-WEB/",
-    "updated_at": "2026-10-10T09:51:26Z",
+    "html_url": "https://github.com/kkjjkamal123/Schneider-Electric---yuva-yodha-tech",
+    "homepage": "",
+    "updated_at": "2026-10-11T21:06:09Z",
     "fork": false
   },
   {
@@ -84,26 +115,6 @@ export const FALLBACK_REPOS = [
     "html_url": "https://github.com/kkjjkamal123/x-drifter",
     "homepage": "",
     "updated_at": "2026-09-29T14:18:57Z",
-    "fork": false
-  },
-  {
-    "name": "MDView",
-    "description": "A fast, offline desktop Markdown reader with full LaTeX, Mermaid and GitHub-flavoured rendering. Windows and Linux.",
-    "language": null,
-    "stargazers_count": 1,
-    "html_url": "https://github.com/kkjjkamal123/MDView",
-    "homepage": "",
-    "updated_at": "2026-09-26T20:43:33Z",
-    "fork": false
-  },
-  {
-    "name": "Schneider-Electric---yuva-yodha-tech",
-    "description": "",
-    "language": "Python",
-    "stargazers_count": 0,
-    "html_url": "https://github.com/kkjjkamal123/Schneider-Electric---yuva-yodha-tech",
-    "homepage": "",
-    "updated_at": "2026-09-09T19:59:12Z",
     "fork": false
   },
   {
@@ -207,16 +218,6 @@ export const FALLBACK_REPOS = [
     "fork": false
   },
   {
-    "name": "kkjj.me",
-    "description": "",
-    "language": "JavaScript",
-    "stargazers_count": 0,
-    "html_url": "https://github.com/kkjjkamal123/kkjj.me",
-    "homepage": "",
-    "updated_at": "2026-07-11T08:31:36Z",
-    "fork": false
-  },
-  {
     "name": "Lipo_Charger",
     "description": "BMS and Circuit Designs for Base Station",
     "language": null,
@@ -278,6 +279,16 @@ export const FALLBACK_REPOS = [
   }
 ]
 
+// Copy shown instead of a repo's GitHub description, for repos whose
+// description on GitHub has fallen behind the project. Applied to live
+// and fallback data alike. Once the description on GitHub is updated,
+// delete the entry here.
+export const DESCRIPTION_OVERRIDES = {
+  // GitHub still says "Windows and Linux"; MDView 1.2 added a native macOS app.
+  MDView:
+    'A fast, offline desktop Markdown reader with full LaTeX, Mermaid and GitHub-flavoured rendering. macOS, Windows and Linux.',
+}
+
 // Repos that should never surface on the site, whatever the API returns.
 // The list is pulled live, so dropping something from FALLBACK_REPOS alone
 // does nothing — a public repo comes straight back on the next fetch.
@@ -301,6 +312,7 @@ const pinRank = (name) => {
 export function rankRepos(repos) {
   return [...repos]
     .filter((r) => !r.fork && !HIDDEN_REPOS.has(r.name))
+    .map((r) => (DESCRIPTION_OVERRIDES[r.name] ? { ...r, description: DESCRIPTION_OVERRIDES[r.name] } : r))
     .sort((a, b) => {
       const ap = pinRank(a.name)
       const bp = pinRank(b.name)
@@ -331,7 +343,7 @@ const CACHE_TTL = 30 * 60 * 1000
 
 function readCache() {
   try {
-    const raw = sessionStorage.getItem(CACHE_KEY)
+    const raw = getItem('sessionStorage', CACHE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw)
     if (!parsed || Date.now() - parsed.t > CACHE_TTL) return null
@@ -345,7 +357,7 @@ function readCache() {
 }
 
 export function useGitHub() {
-  const cached = typeof sessionStorage !== 'undefined' ? readCache() : null
+  const [cached] = useState(readCache)
 
   const [profile, setProfile] = useState(cached ? cached.profile : FALLBACK_PROFILE)
   const [repos, setRepos] = useState(cached ? cached.repos : rankRepos(FALLBACK_REPOS))
@@ -375,9 +387,7 @@ export function useGitHub() {
         setProfile(p)
         setRepos(ranked)
         setLive(true)
-        try {
-          sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), profile: p, repos: ranked }))
-        } catch { /* storage full or blocked — not worth failing over */ }
+        setItem('sessionStorage', CACHE_KEY, JSON.stringify({ t: Date.now(), profile: p, repos: ranked }))
       } catch {
         /* keep the baked-in fallback data */
       }

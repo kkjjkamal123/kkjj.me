@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
+import { getItem, setItem } from '../lib/storage'
 
 // Shown once per browser session. The page underneath is held at
 // opacity 0 until this reports done, so `onDone` must fire on every
@@ -8,7 +9,9 @@ import { m, AnimatePresence } from 'framer-motion'
 const SESSION_KEY = 'preloader_shown'
 
 export default function Preloader({ onDone }) {
-  const alreadyShown = typeof sessionStorage !== 'undefined' && sessionStorage.getItem(SESSION_KEY) === '1'
+  // Read once: re-reading on later renders would flip to true after
+  // finish() writes the key, and unmount the curtain mid-exit.
+  const [alreadyShown] = useState(() => getItem('sessionStorage', SESSION_KEY) === '1')
 
   const [pct, setPct] = useState(0)
   const [done, setDone] = useState(alreadyShown)
@@ -21,7 +24,7 @@ export default function Preloader({ onDone }) {
   const finish = () => {
     if (firedRef.current) return
     firedRef.current = true
-    try { sessionStorage.setItem(SESSION_KEY, '1') } catch { /* private mode */ }
+    setItem('sessionStorage', SESSION_KEY, '1')
     onDoneRef.current?.()
   }
 
@@ -41,7 +44,11 @@ export default function Preloader({ onDone }) {
       if (t < 1) {
         raf = requestAnimationFrame(tick)
       } else {
-        timeoutId = setTimeout(() => setDone(true), 120)
+        // Reveal the page as the curtain starts to lift rather than once
+        // it has gone: the hero entrance then plays out under the wipe
+        // instead of after it, which brings the largest paint ~0.7 s
+        // earlier on a first visit.
+        timeoutId = setTimeout(() => { setDone(true); finish() }, 120)
       }
     }
     raf = requestAnimationFrame(tick)

@@ -212,11 +212,14 @@ export default function Hero({ ready = true }) {
           aria-hidden="true"
           style={{ position: 'absolute', top: '50%', left: '50%', translate: '-50% -50%', zIndex: 0, pointerEvents: 'none' }}
         >
+          {/* Kept short: this is the largest text on the page, so its fade
+              decides Largest Contentful Paint. At 1.6 s it landed about a
+              second after the name had already painted. */}
           <m.span
             className="mega"
             initial={{ opacity: 0 }}
             animate={ready ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 1.6, delay: 0.1 }}
+            transition={{ duration: 0.9 }}
             style={{
               display: 'block',
               x: parX,
