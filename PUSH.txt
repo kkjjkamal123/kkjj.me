@@ -20,13 +20,6 @@ STEP 2 - Review what's new
     git log --oneline origin/main..main
     cat CHANGELOG.md
 
-The new commits end with a "Co-Authored-By: Claude" trailer. Earlier
-commits in this repo have a single author. If you want to keep it that
-way, strip the trailer before you push:
-
-    git rebase origin/main --exec \
-      'git commit --amend --no-edit -m "$(git log -1 --format=%B | grep -v "^Co-Authored-By:")"'
-
 ------------------------------------------------------------
 STEP 3 - Push
 ------------------------------------------------------------

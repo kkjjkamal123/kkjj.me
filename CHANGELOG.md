@@ -50,7 +50,7 @@ First versioned release (`package.json` was at `0.0.0`).
 - Scroll-linked rail on the timeline.
 - `public/404.html`, `robots.txt` and `sitemap.xml`. Removed the catch-all rewrite that turned every bad
   URL into a soft 404.
-- Open Graph `site_name`/`locale`/`image:alt`, `twitter:image` and JSON-LD `affiliation`.
+- Open Graph `site_name`/`locale`/`image:alt` and `twitter:image`.
 - Vitest suite (`npm test`, 11 tests) and `npm run check`. CI now lints and tests before it builds.
 - `engines` field (Node 20.19+ / 22.12+, Vite 8's minimum).
 
